@@ -82,5 +82,59 @@
     "cols": 10,
     "done": true,
     "updated": "2026-04-16 11:09"
+  },
+  "2018": {
+    "rows": 260,
+    "cols": 10,
+    "done": true,
+    "updated": "2026-04-16 11:15"
+  },
+  "2019": {
+    "rows": 260,
+    "cols": 10,
+    "done": true,
+    "updated": "2026-04-16 11:18"
+  },
+  "2020": {
+    "rows": 261,
+    "cols": 10,
+    "done": true,
+    "updated": "2026-04-16 11:23"
+  },
+  "2021": {
+    "rows": 260,
+    "cols": 10,
+    "done": true,
+    "updated": "2026-04-16 11:27"
+  },
+  "2022": {
+    "rows": 260,
+    "cols": 10,
+    "done": true,
+    "updated": "2026-04-16 11:30"
+  },
+  "2023": {
+    "rows": 260,
+    "cols": 15,
+    "done": true,
+    "updated": "2026-04-16 11:34"
+  },
+  "2024": {
+    "rows": 261,
+    "cols": 15,
+    "done": true,
+    "updated": "2026-04-16 11:38"
+  },
+  "2025": {
+    "rows": 258,
+    "cols": 15,
+    "done": true,
+    "updated": "2026-04-16 11:42"
+  },
+  "2026": {
+    "rows": 75,
+    "cols": 15,
+    "done": true,
+    "updated": "2026-04-16 11:45"
   }
 }
