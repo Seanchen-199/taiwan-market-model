@@ -1413,7 +1413,7 @@
   "model_comparison": [
     {
       "name": "LogisticRegression",
-      "cv_acc": NaN,
+      "cv_acc": null,
       "val_acc": 48.9,
       "test_acc": 51.6,
       "is_best": false
@@ -1427,7 +1427,7 @@
     },
     {
       "name": "GradientBoosting",
-      "cv_acc": NaN,
+      "cv_acc": null,
       "val_acc": 50.9,
       "test_acc": 52.9,
       "is_best": false
