@@ -42,6 +42,9 @@ jobs:
           echo "start=$START" >> $GITHUB_OUTPUT
           echo "end=$END" >> $GITHUB_OUTPUT
 
+      - name: API 診斷
+        run: python diagnose_api.py
+
       - name: 分年份收集資料
         run: |
           START=${{ steps.years.outputs.start }}
