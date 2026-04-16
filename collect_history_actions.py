@@ -3,35 +3,35 @@
 修復：TWSE 三大法人（2012/05起）、融資餘額格式、TAIFEX 舊端點解析
 執行：python collect_history_actions.py --year 2015
 """
-
+ 
 import subprocess, sys, os, json, time, datetime, calendar, warnings, re
 import argparse
-
+ 
 def install(pkg):
     subprocess.check_call([sys.executable,'-m','pip','install',pkg,'-q'])
 install('yfinance'); install('pandas'); install('requests'); install('lxml')
-
+ 
 import pandas as pd
 import yfinance as yf
 import requests
 warnings.filterwarnings('ignore')
-
+ 
 os.makedirs('data/history', exist_ok=True)
-
+ 
 parser = argparse.ArgumentParser()
 parser.add_argument('--year', type=int, required=True)
 args   = parser.parse_args()
-
+ 
 YEAR  = args.year
 START = f'{YEAR}-01-01'
 END   = f'{YEAR}-12-31'
 print(f"\n{'='*50}\n抓取年份：{YEAR}\n{'='*50}\n")
-
+ 
 H_TWSE   = {'User-Agent':'Mozilla/5.0','Referer':'https://www.twse.com.tw/'}
 H_TAIFEX = {'User-Agent':'Mozilla/5.0','Referer':'https://www.taifex.com.tw/'}
 months   = [(YEAR, m) for m in range(1, 13)]
 frames   = {}
-
+ 
 def roc_to_date(s):
     try:
         p = str(s).strip().split('/')
@@ -41,11 +41,11 @@ def roc_to_date(s):
             return datetime.date(y, int(p[1]), int(p[2]))
     except: pass
     return None
-
+ 
 def pn(s):
     try: return int(str(s).replace(',','').replace(' ',''))
     except: return 0
-
+ 
 # ════════════════════════════════════════════════════
 # 1. Yahoo Finance
 # ════════════════════════════════════════════════════
@@ -65,12 +65,12 @@ for sym, name in YAHOO.items():
         print(f"  ✅ {name}: {len(s)} 筆")
     except Exception as e:
         print(f"  ❌ {name}: {e}")
-
+ 
 if yf_frames:
     ydf = pd.DataFrame(yf_frames)
     ydf.index = pd.to_datetime(ydf.index)
     frames['yahoo'] = ydf
-
+ 
 # ════════════════════════════════════════════════════
 # 2. TWSE 三大法人（2012/05 之後才有資料）
 # ════════════════════════════════════════════════════
@@ -99,7 +99,7 @@ else:
         except Exception as e:
             print(f"  [警告] {y}/{m:02d}: {e}")
         time.sleep(0.5)
-
+ 
     if inst_rows:
         idf = pd.DataFrame(inst_rows)
         idf['date'] = pd.to_datetime(idf['date'])
@@ -111,7 +111,7 @@ else:
         print(f"  ✅ {len(idf)} 筆")
     else:
         print("  ❌ 失敗")
-
+ 
 # ════════════════════════════════════════════════════
 # 3. TWSE 融資餘額（修復：改用正確查詢格式）
 # ════════════════════════════════════════════════════
@@ -142,7 +142,7 @@ for y, m in months:
             pass
         time.sleep(0.3)
     time.sleep(0.3)
-
+ 
 if margin_rows:
     mdf = pd.DataFrame(margin_rows)
     mdf['date'] = pd.to_datetime(mdf['date'])
@@ -152,7 +152,7 @@ if margin_rows:
     print(f"  ✅ {len(mdf)} 筆")
 else:
     print("  ❌ 失敗（TWSE 融資餘額此期間可能不提供）")
-
+ 
 # ════════════════════════════════════════════════════
 # 4. TAIFEX 期貨（TXF / MTX / MXF）
 #    修復：2024 之前用舊端點 futContractsDate（HTML），
@@ -168,7 +168,7 @@ def fetch_taifex_futures_v2(y, m, commodity):
     start_str = f"{y}/{m:02d}/01"
     end_str   = f"{y}/{m:02d}/{last:02d}"
     rows = []
-
+ 
     # 先試新端點（CSV）
     try:
         resp = requests.post(
@@ -190,14 +190,14 @@ def fetch_taifex_futures_v2(y, m, commodity):
         if rows:
             return rows
     except: pass
-
+ 
     # 舊端點（HTML 表格格式）
     try:
         resp = requests.post(
             'https://www.taifex.com.tw/cht/3/futContractsDate',
             data={'queryStartDate': start_str, 'queryEndDate': end_str, 'commodityId': commodity},
             headers=H_TAIFEX, timeout=25)
-
+ 
         # 用正則解析 HTML 表格中的數字
         html = resp.text
         # 找日期和對應的外資淨多單
@@ -205,7 +205,7 @@ def fetch_taifex_futures_v2(y, m, commodity):
         date_pattern = re.compile(r'(\d{3}/\d{2}/\d{2})')
         # 找所有 tr 行
         tr_blocks = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
-
+ 
         cur_date = None
         for tr in tr_blocks:
             # 抓日期
@@ -213,7 +213,7 @@ def fetch_taifex_futures_v2(y, m, commodity):
             if date_match:
                 d = roc_to_date(date_match.group(1))
                 if d: cur_date = d
-
+ 
             # 抓外資行的數字
             if cur_date and ('外資' in tr or 'Foreign' in tr):
                 # 移除 HTML tags
@@ -224,14 +224,14 @@ def fetch_taifex_futures_v2(y, m, commodity):
                     except: pass
                 if len(nums) >= 5:
                     rows.append({'date': cur_date, f'{commodity}_net': nums[4]})
-
+ 
         if rows:
             return rows
     except Exception as e:
         print(f"  [警告] 舊端點解析失敗 {y}/{m:02d}: {e}")
-
+ 
     return []
-
+ 
 for commodity in ['TXF', 'MTX']:
     print(f"\n【期貨】{commodity}")
     fut_rows = []
@@ -247,7 +247,7 @@ for commodity in ['TXF', 'MTX']:
         print(f"  ✅ {len(fdf)} 筆")
     else:
         print(f"  ❌ 失敗")
-
+ 
 # 微台指（2017/11 後）
 if YEAR >= 2017:
     commodity = 'MXF'
@@ -266,7 +266,7 @@ if YEAR >= 2017:
         print(f"  ✅ {len(mdf2)} 筆")
     else:
         print(f"  ❌ 失敗")
-
+ 
 # ════════════════════════════════════════════════════
 # 5. TAIFEX 前五大/十大交易人留倉
 # ════════════════════════════════════════════════════
@@ -300,7 +300,7 @@ for y, m in months:
     except Exception as e:
         print(f"  [警告] {y}/{m:02d}: {e}")
     time.sleep(0.4)
-
+ 
 if lt_rows:
     ltdf = pd.DataFrame(lt_rows)
     ltdf['date'] = pd.to_datetime(ltdf['date'])
@@ -310,7 +310,7 @@ if lt_rows:
     print(f"  ✅ {len(ltdf)} 筆")
 else:
     print("  ❌ 失敗")
-
+ 
 # ════════════════════════════════════════════════════
 # 6. TAIFEX 外資選擇權（2007 之後）
 # ════════════════════════════════════════════════════
@@ -347,7 +347,7 @@ if YEAR >= 2007:
         except Exception as e:
             print(f"  [警告] {y}/{m:02d}: {e}")
         time.sleep(0.4)
-
+ 
     if opt_rows:
         odf = pd.DataFrame(opt_rows)
         odf['date'] = pd.to_datetime(odf['date'])
@@ -357,24 +357,24 @@ if YEAR >= 2007:
         print(f"  ✅ {len(odf)} 筆")
     else:
         print("  ❌ 失敗")
-
+ 
 # ════════════════════════════════════════════════════
 # 7. 合併本年資料
 # ════════════════════════════════════════════════════
 print(f"\n【7】合併 {YEAR} 年資料")
 if 'yahoo' not in frames:
     print("❌ Yahoo 資料失敗"); sys.exit(1)
-
+ 
 master = frames['yahoo'].copy()
 for key in ['inst','margin','TXF','MTX','MXF','largetrader','option']:
     if key in frames and not frames[key].empty:
         master = master.join(frames[key], how='left')
-
+ 
 master.index.name = 'date'
 out_path = f'data/history/{YEAR}.csv'
 master.to_csv(out_path)
 print(f"✅ 已儲存：{out_path}（{len(master)} 列 × {master.shape[1]} 欄）")
-
+ 
 # 更新進度
 progress_path = 'data/history/progress.json'
 try:
