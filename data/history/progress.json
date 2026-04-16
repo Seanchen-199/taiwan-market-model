@@ -69,7 +69,11 @@
     "rows": 260,
     "cols": 10,
     "done": true,
-    "updated": "2026-04-16 11:02"
+    "updated": "2026-04-16 12:32",
+    "sources": [
+      "yahoo",
+      "largetrader"
+    ]
   },
   "2016": {
     "rows": 261,
