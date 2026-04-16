@@ -1,0 +1,33 @@
+name: 每日自動抓取台股資料
+
+on:
+  schedule:
+    - cron: '30 7 * * 1-5'
+    - cron: '0 1 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 取出程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 執行資料抓取腳本
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python fetch_data.py
+
+      - name: 提交並推送更新資料
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add data/data.json
+          git diff --staged --quiet || git commit -m "📊 自動更新：$(date '+%Y/%m/%d %H:%M') 台灣時間"
+          git push
