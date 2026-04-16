@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: 測試 TWSE API 格式
+        run: python test_twse.py
+
       - name: 計算年份範圍
         id: years
         run: |
@@ -38,7 +41,6 @@ jobs:
           fi
           echo "start=$START" >> $GITHUB_OUTPUT
           echo "end=$END" >> $GITHUB_OUTPUT
-          echo "收集年份：$START ～ $END"
 
       - name: 分年份收集資料
         run: |
