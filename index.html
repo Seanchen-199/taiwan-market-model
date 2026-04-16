@@ -3,712 +3,785 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>台股多因子量化模型</title>
+<title>台股量化分析系統</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+TC:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root {
-  --bg:       #080c10;
-  --bg2:      #0d1520;
-  --bg3:      #121c2a;
-  --bg4:      #172033;
-  --line:     rgba(255,255,255,0.06);
-  --line2:    rgba(255,255,255,0.12);
-  --text:     #dde6f0;
-  --text2:    #7a90a8;
-  --text3:    #3a4e62;
-  --bull:     #00e5a0;
-  --bull2:    rgba(0,229,160,0.08);
-  --bear:     #ff4d6a;
-  --bear2:    rgba(255,77,106,0.08);
-  --accent:   #3d8eff;
-  --accent2:  rgba(61,142,255,0.1);
-  --gold:     #f0c040;
-  --gold2:    rgba(240,192,64,0.1);
-  --font-d:   'Syne', sans-serif;
-  --font-b:   'Noto Sans TC', sans-serif;
-  --mono:     'JetBrains Mono', monospace;
+:root{
+  --bg:#080c10;--bg2:#0d1520;--bg3:#121c2a;--bg4:#172033;
+  --line:rgba(255,255,255,0.06);--line2:rgba(255,255,255,0.13);
+  --text:#dde6f0;--text2:#7a90a8;--text3:#3a4e62;
+  --bull:#00e5a0;--bull2:rgba(0,229,160,0.08);
+  --bear:#ff4d6a;--bear2:rgba(255,77,106,0.08);
+  --caution:#f0c040;--caution2:rgba(240,192,64,0.08);
+  --accent:#3d8eff;--accent2:rgba(61,142,255,0.1);
+  --font-d:'Syne',sans-serif;
+  --font-b:'Noto Sans TC',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --r:12px;--r-sm:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{
-  font-family:var(--font-b);
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* grid bg */
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(61,142,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61,142,255,0.03) 1px, transparent 1px);
-  background-size:48px 48px;
-  pointer-events:none;
-  z-index:0;
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(61,142,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(61,142,255,0.025) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;
 }
 
-/* ── NAV ── */
+/* NAV */
 nav{
-  position:sticky;top:0;z-index:100;
+  position:sticky;top:0;z-index:200;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;height:56px;
-  background:rgba(8,12,16,0.85);
+  padding:0 1.5rem;height:54px;
+  background:rgba(8,12,16,0.9);
   border-bottom:1px solid var(--line);
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(16px);
 }
-.nav-logo{
-  font-family:var(--font-d);
-  font-size:13px;font-weight:800;
-  letter-spacing:.15em;
-  color:var(--text);
+.nav-logo{font-family:var(--font-d);font-size:13px;font-weight:800;letter-spacing:.12em;}
+.nav-logo em{color:var(--accent);font-style:normal;}
+.nav-tabs{display:flex;gap:2px;background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:3px;}
+.nav-tab{
+  font-family:var(--font-b);font-size:12px;font-weight:500;
+  padding:5px 14px;border-radius:6px;border:none;
+  background:transparent;color:var(--text2);cursor:pointer;
+  transition:all .2s;white-space:nowrap;
 }
-.nav-logo span{color:var(--accent);}
-.nav-meta{
-  display:flex;align-items:center;gap:16px;
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{background:var(--bg4);color:var(--text);border:1px solid var(--line2);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.live-badge{
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:10px;color:var(--text3);
 }
-.nav-tag{
-  font-family:var(--mono);
-  font-size:11px;color:var(--text3);
-  letter-spacing:.05em;
-}
-.signal-pill{
-  display:flex;align-items:center;gap:6px;
-  padding:4px 12px;border-radius:20px;
-  font-family:var(--mono);font-size:11px;font-weight:600;
-  letter-spacing:.06em;
-}
-.signal-pill.bull{background:var(--bull2);color:var(--bull);border:1px solid rgba(0,229,160,0.2);}
-.signal-pill.bear{background:var(--bear2);color:var(--bear);border:1px solid rgba(255,77,106,0.2);}
-.pill-dot{width:5px;height:5px;border-radius:50%;animation:blink 2s infinite;}
-.bull .pill-dot{background:var(--bull);}
-.bear .pill-dot{background:var(--bear);}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--text3);}
+.live-dot.on{background:var(--bull);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ── LAYOUT ── */
-.wrap{
-  position:relative;z-index:1;
-  max-width:1200px;margin:0 auto;
-  padding:2rem 1.5rem 4rem;
-}
+/* WRAP */
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:1.5rem 1.5rem 4rem;}
 
-/* ── HERO ── */
-.hero{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:1px;
-  background:var(--line);
-  border:1px solid var(--line);
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:2rem;
-}
-.hero-cell{
-  background:var(--bg2);
-  padding:2rem;
-  position:relative;
-  overflow:hidden;
-}
-.hero-cell::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(61,142,255,0.04),transparent);
-  pointer-events:none;
-}
-.hero-cell.signal-cell{
-  grid-column:1;
-  display:flex;flex-direction:column;justify-content:center;
-}
-.hero-label{
-  font-family:var(--mono);
-  font-size:10px;letter-spacing:.12em;
-  color:var(--text3);text-transform:uppercase;
-  margin-bottom:12px;
-}
-.signal-big{
-  font-family:var(--font-d);
-  font-size:48px;font-weight:800;
-  line-height:1;margin-bottom:8px;
-  letter-spacing:-.02em;
-}
-.signal-big.bull{color:var(--bull);}
-.signal-big.bear{color:var(--bear);}
-.prob-bar-wrap{margin-top:16px;}
-.prob-label{
-  display:flex;justify-content:space-between;
-  font-family:var(--mono);font-size:11px;
-  color:var(--text2);margin-bottom:6px;
-}
-.prob-track{
-  height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;
-  display:flex;
-}
-.prob-bull-fill{height:100%;background:var(--bull);border-radius:3px 0 0 3px;transition:width .8s ease;}
-.prob-bear-fill{height:100%;background:var(--bear);border-radius:0 3px 3px 0;transition:width .8s ease;}
+/* PAGE SECTIONS */
+.page{display:none;}
+.page.active{display:block;}
 
-.metrics-cell{
-  background:var(--bg2);
-  padding:2rem;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1px;
-}
-.metric-item{
-  padding:1rem;
-  background:var(--bg3);
-}
-.metric-item:first-child{border-radius:8px 0 0 0;}
-.metric-item:nth-child(2){border-radius:0 8px 0 0;}
-.metric-item:nth-child(3){border-radius:0 0 0 8px;}
-.metric-item:last-child{border-radius:0 0 8px 0;}
-.metric-val{
-  font-family:var(--mono);
-  font-size:22px;font-weight:600;
-  margin-bottom:4px;
-}
-.metric-name{font-size:11px;color:var(--text3);}
-.m-bull{color:var(--bull);}
-.m-bear{color:var(--bear);}
-.m-gold{color:var(--gold);}
-.m-acc{color:var(--accent);}
-
-.model-cell{
-  background:var(--bg2);padding:2rem;
-}
-.model-name-big{
-  font-family:var(--font-d);
-  font-size:18px;font-weight:700;
-  color:var(--text);margin-bottom:4px;
-}
-.model-sub{font-size:12px;color:var(--text3);margin-bottom:1.5rem;}
-.model-compare-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 0;border-top:1px solid var(--line);
-  font-size:12px;
-}
-.mc-name{color:var(--text2);}
-.mc-vals{
-  display:flex;gap:8px;
-  font-family:var(--mono);font-size:11px;
-}
-.mc-badge{
-  padding:2px 7px;border-radius:4px;
-}
-.mc-best{background:var(--accent2);color:var(--accent);}
-.mc-ok{color:var(--text3);}
-
-/* ── SECTION HEADER ── */
-.section-hd{
-  display:flex;align-items:baseline;gap:12px;
-  margin:2.5rem 0 1rem;
-}
-.section-hd h2{
-  font-family:var(--font-d);
-  font-size:18px;font-weight:700;
-  letter-spacing:-.01em;
-}
-.section-hd span{
-  font-family:var(--mono);
-  font-size:11px;color:var(--text3);
-  letter-spacing:.06em;
-}
-
-/* ── CHART CARD ── */
-.chart-card{
-  background:var(--bg2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:1.5rem;
+/* ══ PAGE 1: 量化模型 ══ */
+.hero-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
   margin-bottom:1.5rem;
 }
-.chart-legend{
-  display:flex;gap:16px;margin-bottom:1rem;
-  font-size:12px;color:var(--text2);
-}
-.legend-dot{
-  display:inline-block;
-  width:8px;height:8px;border-radius:2px;margin-right:5px;
-}
+.hero-cell{background:var(--bg2);padding:1.75rem;}
+.h-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;}
+.signal-num{font-family:var(--font-d);font-size:52px;font-weight:800;line-height:1;letter-spacing:-.02em;}
+.signal-num.bull{color:var(--bull);}
+.signal-num.bear{color:var(--bear);}
+.prob-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text2);margin:14px 0 5px;}
+.prob-track{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;display:flex;}
+.prob-b{height:100%;border-radius:3px 0 0 3px;transition:width .8s;}
+.prob-r{height:100%;border-radius:0 3px 3px 0;transition:width .8s;}
+.metrics-2x3{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);}
+.m-cell{background:var(--bg3);padding:.875rem 1rem;}
+.m-val{font-family:var(--mono);font-size:20px;font-weight:600;margin-bottom:3px;}
+.m-lbl{font-size:11px;color:var(--text3);}
+.mc-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:12px;}
+.mc-scores{display:flex;gap:6px;font-family:var(--mono);font-size:10px;}
+.mc-badge{padding:2px 6px;border-radius:4px;}
+.best-badge{background:var(--accent2);color:var(--accent);}
+.ok-badge{color:var(--text3);}
 
-/* ── FACTOR BARS ── */
-.factors-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1rem;
-  margin-bottom:1.5rem;
-}
-.factor-list{
-  background:var(--bg2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:1.25rem;
-}
-.factor-list-title{
-  font-family:var(--mono);
-  font-size:10px;letter-spacing:.1em;
-  color:var(--text3);text-transform:uppercase;
-  margin-bottom:1rem;
-  padding-bottom:.75rem;
-  border-bottom:1px solid var(--line);
-}
-.factor-row{
-  display:grid;
-  grid-template-columns:140px 1fr 48px;
-  align-items:center;
-  gap:10px;
-  padding:6px 0;
-  border-top:1px solid var(--line);
-}
-.factor-row:first-of-type{border-top:none;}
-.f-name{font-size:11px;color:var(--text2);line-height:1.3;}
-.f-bar-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;}
-.f-bar-fill{height:100%;border-radius:2px;transition:width .6s ease;}
-.f-val{
-  font-family:var(--mono);
-  font-size:11px;font-weight:600;
-  text-align:right;
-}
-.core-fill{background:var(--accent);}
-.sec-fill{background:var(--text3);}
-.core-val{color:var(--accent);}
-.sec-val{color:var(--text3);}
+.sec-hd{display:flex;align-items:baseline;gap:10px;margin:2rem 0 1rem;}
+.sec-hd h2{font-family:var(--font-d);font-size:17px;font-weight:700;}
+.sec-hd span{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em;}
 
-/* ── DATA TABLE ── */
-.data-card{
-  background:var(--bg2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:1.25rem;
-  margin-bottom:1.5rem;
-}
-.data-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:1px;
-  background:var(--line);
-  border:1px solid var(--line);
-  border-radius:8px;
-  overflow:hidden;
-  margin-top:1rem;
-}
-.data-item{
-  background:var(--bg3);
-  padding:.875rem 1rem;
-}
-.di-label{font-size:11px;color:var(--text3);margin-bottom:4px;}
-.di-val{
-  font-family:var(--mono);
-  font-size:15px;font-weight:600;
-  color:var(--text);
-}
+.chart-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1.25rem;}
+.chart-legend{display:flex;gap:14px;margin-bottom:1rem;font-size:12px;color:var(--text2);}
+.leg-dot{display:inline-block;width:8px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle;}
 
-/* ── DISCLAIMER ── */
-.disclaimer{
-  margin-top:3rem;
-  padding:1.25rem;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:var(--bg2);
-}
-.disclaimer p{
-  font-size:11px;color:var(--text3);
-  line-height:1.8;text-align:center;
-}
+.factors-2col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem;}
+.factor-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;}
+.fc-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem;padding-bottom:.75rem;border-bottom:1px solid var(--line);}
+.f-row{display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);}
+.f-row:first-of-type{border-top:none;}
+.f-name{font-size:11px;color:var(--text2);}
+.f-track{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+.f-fill{height:100%;border-radius:2px;}
+.f-fill.core{background:var(--accent);}
+.f-fill.sec{background:var(--text3);}
+.f-pct{font-family:var(--mono);font-size:10px;text-align:right;}
+.f-pct.core{color:var(--accent);}
+.f-pct.sec{color:var(--text3);}
 
-/* ── LOADING ── */
-#loading{
-  position:fixed;inset:0;
-  background:var(--bg);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  z-index:999;
-  transition:opacity .4s;
-}
-.load-logo{
-  font-family:var(--font-d);
-  font-size:20px;font-weight:800;
-  letter-spacing:.1em;
-  color:var(--text2);
-  margin-bottom:24px;
-}
-.load-bar{
-  width:200px;height:2px;
-  background:var(--bg4);border-radius:1px;overflow:hidden;
-}
-.load-fill{
-  height:100%;width:0;
-  background:var(--accent);
-  animation:load 1.2s ease forwards;
-}
-@keyframes load{to{width:100%}}
+.data-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;margin-top:.875rem;}
+.chip{background:var(--bg3);padding:.875rem 1rem;}
+.chip-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;}
+.chip-val{font-family:var(--mono);font-size:15px;font-weight:600;}
 
-/* ── RESPONSIVE ── */
+/* ══ PAGE 2: 監控儀表板 ══ */
+.score-hero{
+  display:grid;grid-template-columns:auto 1fr auto;
+  gap:1.5rem;align-items:center;
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:var(--r);padding:1.75rem;
+  margin-bottom:1.25rem;
+}
+.score-num-big{font-family:var(--mono);font-size:64px;font-weight:600;line-height:1;}
+.verdict-tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.06em;margin-bottom:8px;}
+.verdict-action{font-size:14px;font-weight:500;margin-bottom:6px;}
+.verdict-desc{font-size:12px;color:var(--text2);line-height:1.7;}
+.gauge-block{min-width:180px;}
+.gauge-lbl{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:.06em;margin-bottom:6px;}
+.gauge-track{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.gauge-fill{height:100%;border-radius:4px;transition:width .5s,background .5s;}
+.gauge-zones{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
+.zone-dots{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.zone-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2);}
+.zone-item::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;}
+.zone-bull::before{background:var(--bull);}
+.zone-caution::before{background:var(--caution);}
+.zone-bear::before{background:var(--bear);}
+
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem;margin-bottom:1.25rem;}
+.cat-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;transition:border-color .2s;}
+.cat-card:hover{border-color:var(--line2);}
+.cat-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.875rem;}
+.cat-name{font-size:13px;font-weight:700;letter-spacing:.03em;}
+.cat-wt{font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;}
+.cat-bar{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:.875rem;overflow:hidden;}
+.cat-bar-fill{height:100%;border-radius:2px;transition:width .5s;}
+.ind-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--line);}
+.ind-left{display:flex;align-items:center;gap:7px;}
+.ind-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.ind-label{font-size:12px;color:var(--text2);}
+.ind-note{font-size:10px;color:var(--text3);margin-top:1px;}
+.ind-score{font-family:var(--mono);font-size:12px;font-weight:600;}
+.ind-mini{width:48px;height:2px;background:var(--bg4);border-radius:1px;margin-top:3px;margin-left:auto;overflow:hidden;}
+.ind-mini-fill{height:100%;border-radius:1px;}
+
+.slider-section{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;}
+.sl-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem;padding-bottom:.75rem;border-bottom:1px solid var(--line);}
+.sl-row{display:grid;grid-template-columns:160px 1fr 32px;align-items:center;gap:10px;padding:5px 0;}
+.sl-lbl{font-size:12px;color:var(--text2);}
+.sl-note{font-size:10px;color:var(--text3);}
+.sl-val{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;border-radius:2px;background:var(--bg4);outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);cursor:pointer;transition:transform .15s;}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3);}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);cursor:pointer;}
+
+/* auto data panel */
+.auto-panel{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1.25rem;display:none;}
+.auto-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem;}
+.auto-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;}
+.auto-meta{font-size:11px;color:var(--text3);}
+.auto-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;}
+.auto-chip{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 12px;display:flex;justify-content:space-between;align-items:center;}
+.ac-lbl{font-size:11px;color:var(--text3);}
+.ac-val{font-family:var(--mono);font-size:12px;font-weight:600;}
+
+/* tabs inside page */
+.inner-tabs{display:flex;gap:3px;margin-bottom:1.25rem;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm);padding:3px;width:fit-content;}
+.inner-tab{font-family:var(--font-b);font-size:12px;font-weight:500;padding:5px 14px;border-radius:6px;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;}
+.inner-tab:hover{color:var(--text);}
+.inner-tab.active{background:var(--bg4);color:var(--text);border:1px solid var(--line2);}
+
+/* shared */
+.c-bull{color:var(--bull);}
+.c-bear{color:var(--bear);}
+.c-caution{color:var(--caution);}
+.c-neutral{color:#6b8cba;}
+.t-bull{background:rgba(0,229,160,0.1);color:var(--bull);}
+.t-bear{background:rgba(255,77,106,0.1);color:var(--bear);}
+.t-caution{background:rgba(240,192,64,0.1);color:var(--caution);}
+.t-neutral{background:rgba(107,140,186,0.1);color:#6b8cba;}
+
+.note{margin-top:2.5rem;padding:1rem 1.25rem;border:1px solid var(--line);border-radius:var(--r-sm);}
+.note p{font-size:11px;color:var(--text3);line-height:1.8;text-align:center;}
+
+/* loading */
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .4s;}
+.ld-logo{font-family:var(--font-d);font-size:18px;font-weight:800;letter-spacing:.12em;color:var(--text2);margin-bottom:20px;}
+.ld-bar{width:160px;height:2px;background:var(--bg4);border-radius:1px;overflow:hidden;}
+.ld-fill{height:100%;width:0;background:var(--accent);animation:ldanim 1.4s ease forwards;}
+@keyframes ldanim{to{width:100%}}
+
+/* responsive */
 @media(max-width:900px){
-  .hero{grid-template-columns:1fr;}
-  .factors-grid{grid-template-columns:1fr;}
-  .factor-row{grid-template-columns:120px 1fr 40px;}
+  .hero-grid{grid-template-columns:1fr;}
+  .factors-2col{grid-template-columns:1fr;}
+  .score-hero{grid-template-columns:1fr;gap:1rem;}
+  .score-num-big{font-size:48px;}
 }
 @media(max-width:600px){
-  .hero-cell{padding:1.25rem;}
-  .signal-big{font-size:36px;}
-  .metrics-cell{grid-template-columns:1fr 1fr;}
+  .nav-logo{font-size:11px;}
+  .wrap{padding:1rem 1rem 3rem;}
+  .f-row{grid-template-columns:110px 1fr 36px;}
+  .sl-row{grid-template-columns:120px 1fr 28px;}
 }
 </style>
 </head>
 <body>
 
 <div id="loading">
-  <div class="load-logo">QUANT<span style="color:var(--accent)">MODEL</span></div>
-  <div class="load-bar"><div class="load-fill"></div></div>
+  <div class="ld-logo">台股<em style="color:var(--accent)">量化</em>系統</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
 
 <nav>
-  <div class="nav-logo">台股<span>多因子</span>量化模型</div>
-  <div class="nav-meta">
-    <span class="nav-tag" id="nav-date">載入中...</span>
-    <div class="signal-pill bull" id="nav-signal">
-      <span class="pill-dot"></span>
-      <span id="nav-signal-text">--</span>
+  <div class="nav-logo">台股<em>量化</em>分析系統</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchPage('model',this)">量化模型</button>
+    <button class="nav-tab" onclick="switchPage('monitor',this)">監控儀表板</button>
+    <button class="nav-tab" onclick="switchPage('guide',this)">操作說明</button>
+  </div>
+  <div class="nav-right">
+    <div class="live-badge">
+      <div class="live-dot" id="live-dot"></div>
+      <span id="live-time">--:--</span>
     </div>
   </div>
 </nav>
 
 <div class="wrap">
 
-  <!-- HERO -->
-  <div class="hero">
+<!-- ══════════════════════════════════════
+     PAGE 1: 量化模型
+══════════════════════════════════════ -->
+<div class="page active" id="page-model">
+
+  <div class="hero-grid">
     <!-- 訊號 -->
-    <div class="hero-cell signal-cell">
-      <div class="hero-label">當前市場訊號</div>
-      <div class="signal-big bull" id="signal-label">--</div>
-      <div style="font-size:13px;color:var(--text2);margin-top:4px;" id="signal-date">--</div>
-      <div class="prob-bar-wrap">
-        <div class="prob-label">
-          <span id="bull-pct">多方 --</span>
-          <span id="bear-pct">空方 --</span>
-        </div>
-        <div class="prob-track">
-          <div class="prob-bull-fill" id="prob-bull" style="width:50%"></div>
-          <div class="prob-bear-fill" id="prob-bear" style="width:50%"></div>
-        </div>
+    <div class="hero-cell">
+      <div class="h-label">當前市場訊號</div>
+      <div class="signal-num bull" id="sig-label">--</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:5px;" id="sig-date">--</div>
+      <div class="prob-row">
+        <span id="prob-bull-lbl">多方 --</span>
+        <span id="prob-bear-lbl">空方 --</span>
       </div>
-      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line);">
-        <div class="hero-label">最佳模型</div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--accent)" id="model-name-nav">--</div>
+      <div class="prob-track">
+        <div class="prob-b" id="prob-bull-bar" style="width:50%;background:var(--bull)"></div>
+        <div class="prob-r" id="prob-bear-bar" style="width:50%;background:var(--bear)"></div>
+      </div>
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line);">
+        <div class="h-label">最佳模型</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="best-model-name">--</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;" id="data-range-txt">--</div>
       </div>
     </div>
-
     <!-- 回測指標 -->
-    <div class="metrics-cell">
-      <div class="metric-item">
-        <div class="metric-val m-bull" id="m-cagr">--</div>
-        <div class="metric-name">策略 CAGR</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-val m-acc" id="m-bh-cagr">--</div>
-        <div class="metric-name">買持0050 CAGR</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-val m-gold" id="m-sharpe">--</div>
-        <div class="metric-name">夏普值</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-val m-bear" id="m-maxdd">--</div>
-        <div class="metric-name">最大回撤</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-val m-bull" id="m-winrate">--</div>
-        <div class="metric-name">勝率</div>
-      </div>
-      <div class="metric-item">
-        <div class="metric-val" id="m-days" style="color:var(--text2)">--</div>
-        <div class="metric-name">回測天數</div>
-      </div>
-      <div class="metric-item" style="grid-column:1/-1;">
-        <div class="metric-name" style="margin-bottom:6px;">訓練 / 驗證 / 測試</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--text2)" id="m-split">--</div>
+    <div class="hero-cell" style="padding:0;">
+      <div class="metrics-2x3">
+        <div class="m-cell"><div class="m-val c-bull" id="m-cagr">--</div><div class="m-lbl">策略 CAGR</div></div>
+        <div class="m-cell"><div class="m-val" style="color:var(--accent)" id="m-bh">--</div><div class="m-lbl">買持0050 CAGR</div></div>
+        <div class="m-cell"><div class="m-val c-caution" id="m-sharpe">--</div><div class="m-lbl">夏普值</div></div>
+        <div class="m-cell"><div class="m-val c-bear" id="m-dd">--</div><div class="m-lbl">最大回撤</div></div>
+        <div class="m-cell"><div class="m-val c-bull" id="m-wr">--</div><div class="m-lbl">勝率</div></div>
+        <div class="m-cell"><div class="m-val" style="color:var(--text2)" id="m-days">--</div><div class="m-lbl">資料天數</div></div>
+        <div class="m-cell" style="grid-column:1/-1;">
+          <div class="m-lbl" style="margin-bottom:5px;">訓練 / 驗證 / 測試</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text2)" id="m-split">--</div>
+        </div>
       </div>
     </div>
-
     <!-- 模型比較 -->
-    <div class="model-cell">
-      <div class="hero-label">模型比較</div>
-      <div id="model-compare-list"></div>
-      <div style="margin-top:1.5rem;">
-        <div class="hero-label">資料範圍</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--text2)" id="data-range">--</div>
-        <div class="hero-label" style="margin-top:12px;">因子數量</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--text2)" id="feat-count">--</div>
+    <div class="hero-cell">
+      <div class="h-label">模型比較（CV / 驗證 / 測試）</div>
+      <div id="model-compare"></div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);">
+        <div class="h-label">特徵數量</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text2)" id="feat-count">--</div>
       </div>
     </div>
   </div>
 
   <!-- 淨值曲線 -->
-  <div class="section-hd">
-    <h2>回測淨值曲線</h2>
-    <span>EQUITY CURVE</span>
-  </div>
+  <div class="sec-hd"><h2>回測淨值曲線</h2><span>EQUITY CURVE</span></div>
   <div class="chart-card">
     <div class="chart-legend">
-      <span><span class="legend-dot" style="background:var(--bull)"></span>量化策略</span>
-      <span><span class="legend-dot" style="background:var(--accent)"></span>買持0050</span>
+      <span><span class="leg-dot" style="background:var(--bull)"></span>量化策略</span>
+      <span><span class="leg-dot" style="background:var(--accent);opacity:.6"></span>買持0050</span>
     </div>
-    <div style="position:relative;height:280px;">
-      <canvas id="equity-chart" role="img" aria-label="回測淨值曲線，比較量化策略與買持0050的表現">策略淨值曲線資料載入中</canvas>
+    <div style="position:relative;height:260px;">
+      <canvas id="equity-chart" role="img" aria-label="回測淨值曲線比較量化策略與買持0050"></canvas>
     </div>
   </div>
 
   <!-- 因子重要性 -->
-  <div class="section-hd">
-    <h2>因子重要性</h2>
-    <span>FACTOR IMPORTANCE</span>
-  </div>
-  <div class="factors-grid">
-    <div class="factor-list">
-      <div class="factor-list-title">★ 核心因子</div>
+  <div class="sec-hd"><h2>因子重要性</h2><span>FACTOR IMPORTANCE</span></div>
+  <div class="factors-2col">
+    <div class="factor-card">
+      <div class="fc-title">★ 核心因子</div>
       <div id="core-factors"></div>
     </div>
-    <div class="factor-list">
-      <div class="factor-list-title">次要因子</div>
+    <div class="factor-card">
+      <div class="fc-title">次要因子</div>
       <div id="sec-factors"></div>
     </div>
   </div>
 
-  <!-- 當前市場數據 -->
-  <div class="section-hd">
-    <h2>當前核心因子數值</h2>
-    <span>LATEST MARKET DATA</span>
-  </div>
-  <div class="data-card">
-    <div style="font-size:12px;color:var(--text3);">以下為模型使用的最新市場數據，資料日期：<span id="latest-date" style="color:var(--text2)">--</span></div>
-    <div class="data-grid" id="latest-data-grid"></div>
+  <!-- 最新市場數據 -->
+  <div class="sec-hd"><h2>最新市場數據</h2><span>LATEST DATA</span></div>
+  <div class="chart-card">
+    <div style="font-size:12px;color:var(--text3);">資料日期：<span id="latest-date" style="color:var(--text2)">--</span></div>
+    <div class="data-chips" id="market-chips"></div>
   </div>
 
-  <!-- 注意事項 -->
-  <div class="disclaimer">
-    <p>
-      本模型為實驗性量化研究工具，所有回測結果基於歷史資料，不代表未來績效。<br>
-      當前有效訓練樣本數較少（三大法人歷史資料待補），模型預測準確度將隨資料增加持續提升。<br>
-      本頁面所有內容僅供個人研究參考，不構成任何投資建議，投資一定有風險，本金可能損失。
-    </p>
+</div><!-- /page-model -->
+
+<!-- ══════════════════════════════════════
+     PAGE 2: 監控儀表板
+══════════════════════════════════════ -->
+<div class="page" id="page-monitor">
+
+  <!-- 即時資料看板 -->
+  <div class="auto-panel" id="auto-panel">
+    <div class="auto-head">
+      <div class="auto-title">即時市場資料</div>
+      <div class="auto-meta" id="auto-meta">--</div>
+    </div>
+    <div class="auto-chips" id="auto-chips"></div>
   </div>
+
+  <!-- 評分 Hero -->
+  <div class="score-hero">
+    <div style="text-align:center;min-width:110px;">
+      <div class="score-num-big" id="total-score" style="color:var(--accent)">--</div>
+      <div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:4px;">/ 100 分</div>
+    </div>
+    <div>
+      <div class="verdict-tag" id="verdict-tag">載入中</div>
+      <div class="verdict-action" id="verdict-action">--</div>
+      <div class="verdict-desc" id="verdict-desc"></div>
+    </div>
+    <div class="gauge-block">
+      <div class="gauge-lbl">多空強度計</div>
+      <div class="gauge-track"><div class="gauge-fill" id="gauge-fill" style="width:0%"></div></div>
+      <div class="gauge-zones"><span>空 0</span><span>100 多</span></div>
+      <div class="zone-dots">
+        <span class="zone-item zone-bull">&gt;65 加碼</span>
+        <span class="zone-item zone-caution">45~65 觀望</span>
+        <span class="zone-item zone-bear">&lt;45 減碼</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 內部分頁 -->
+  <div class="inner-tabs">
+    <button class="inner-tab active" onclick="switchInner('cats',this)">指標總覽</button>
+    <button class="inner-tab" onclick="switchInner('sliders',this)">手動調整</button>
+  </div>
+
+  <div id="inner-cats">
+    <div class="cats-grid" id="cats-grid"></div>
+  </div>
+
+  <div id="inner-sliders" style="display:none;">
+    <div id="sliders-wrap"></div>
+  </div>
+
+</div><!-- /page-monitor -->
+
+<!-- ══════════════════════════════════════
+     PAGE 3: 操作說明
+══════════════════════════════════════ -->
+<div class="page" id="page-guide">
+  <div class="sec-hd"><h2>加減碼規則</h2><span>SIGNAL GUIDE</span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;">
+
+    <div class="chart-card">
+      <div class="h-label" style="margin-bottom:.75rem;">評分區間對照</div>
+      <div class="ind-row"><span class="ind-label">總分 ≥ 70</span><span class="c-bull" style="font-size:13px;font-weight:500;">積極加碼 +20~30%</span></div>
+      <div class="ind-row"><span class="ind-label">總分 65~69</span><span class="c-bull" style="font-size:13px;font-weight:500;">小幅加碼 +10%</span></div>
+      <div class="ind-row"><span class="ind-label">總分 45~64</span><span class="c-neutral" style="font-size:13px;font-weight:500;">維持標準倉位</span></div>
+      <div class="ind-row"><span class="ind-label">總分 35~44</span><span class="c-caution" style="font-size:13px;font-weight:500;">減碼 10~20%</span></div>
+      <div class="ind-row"><span class="ind-label">總分 &lt; 35</span><span class="c-bear" style="font-size:13px;font-weight:500;">大幅減碼或空手</span></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="h-label" style="margin-bottom:.75rem;">台幣匯率</div>
+      <div class="ind-row"><span class="ind-label">台幣持續升值</span><span class="c-bull" style="font-size:12px;">外資匯入，正面訊號</span></div>
+      <div class="ind-row"><span class="ind-label">台幣急速貶值</span><span class="c-bear" style="font-size:12px;">外資撤退警訊</span></div>
+      <div class="ind-row"><span class="ind-label">波動劇烈</span><span class="c-caution" style="font-size:12px;">不確定性高，觀望</span></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="h-label" style="margin-bottom:.75rem;">VIX 恐慌指數</div>
+      <div class="ind-row"><span class="ind-label">VIX &lt; 15</span><span class="c-bull" style="font-size:12px;">市場平靜，正面</span></div>
+      <div class="ind-row"><span class="ind-label">VIX 15~25</span><span class="c-neutral" style="font-size:12px;">正常波動</span></div>
+      <div class="ind-row"><span class="ind-label">VIX 25~35</span><span class="c-caution" style="font-size:12px;">市場恐慌，觀望</span></div>
+      <div class="ind-row"><span class="ind-label">VIX &gt; 35</span><span class="c-bull" style="font-size:12px;">極度恐慌，逢低機會</span></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="h-label" style="margin-bottom:.75rem;">Put/Call Ratio</div>
+      <div class="ind-row"><span class="ind-label">P/C &gt; 1.5</span><span class="c-bull" style="font-size:12px;">悲觀過度，反向加碼</span></div>
+      <div class="ind-row"><span class="ind-label">P/C 1.0~1.5</span><span class="c-neutral" style="font-size:12px;">市場偏保守</span></div>
+      <div class="ind-row"><span class="ind-label">P/C &lt; 0.7</span><span class="c-bear" style="font-size:12px;">過度樂觀，減碼訊號</span></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="h-label" style="margin-bottom:.75rem;">景氣燈號</div>
+      <div class="ind-row"><span class="ind-label">紅燈（過熱）</span><span class="c-caution" style="font-size:12px;">景氣過熱，減碼</span></div>
+      <div class="ind-row"><span class="ind-label">黃紅 / 綠燈</span><span class="c-bull" style="font-size:12px;">景氣穩定擴張，正面</span></div>
+      <div class="ind-row"><span class="ind-label">黃藍燈</span><span class="c-caution" style="font-size:12px;">景氣轉弱，觀察</span></div>
+      <div class="ind-row"><span class="ind-label">藍燈（衰退）</span><span class="c-bear" style="font-size:12px;">景氣衰退，避險</span></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="h-label" style="margin-bottom:.75rem;">量化模型說明</div>
+      <div class="ind-row"><span class="ind-label">核心因子</span><span style="font-size:11px;color:var(--text2);">SOX、美債、DXY、匯率等</span></div>
+      <div class="ind-row"><span class="ind-label">次要因子</span><span style="font-size:11px;color:var(--text2);">RSI、MACD 等技術指標</span></div>
+      <div class="ind-row"><span class="ind-label">模型更新</span><span style="font-size:11px;color:var(--text2);">每週自動重新訓練</span></div>
+      <div class="ind-row"><span class="ind-label">訊號解讀</span><span style="font-size:11px;color:var(--text2);">多方機率 &gt;60% 為做多訊號</span></div>
+    </div>
+
+  </div>
+  <div class="note" style="margin-top:2rem;">
+    <p>本系統為個人量化研究工具，所有模型預測與評分結果僅供參考，不構成投資建議。<br>
+    歷史回測績效不代表未來表現，投資一定有風險，本金可能損失。</p>
+  </div>
+</div><!-- /page-guide -->
 
 </div><!-- /wrap -->
 
 <script>
-let equityChart = null;
+// ── 狀態 ────────────────────────────────────────────────────
+const CATEGORIES = [
+  {name:'市場情緒面',weight:.25,color:'#00e5a0',indicators:[
+    {id:'s1',label:'融資餘額變化',note:'融資遞增=多方',def:5},
+    {id:'s2',label:'外資買超強度',note:'連續買超為正',def:5},
+    {id:'s3',label:'投信買超強度',note:'投信連買為健康支撐',def:5},
+    {id:'s4',label:'大戶持股比例',note:'籌碼集中度升高為正',def:6},
+  ]},
+  {name:'籌碼 / 期貨選擇權',weight:.20,color:'#a78bfa',indicators:[
+    {id:'s5',label:'外資期貨淨多單',note:'多單越多越正面',def:5},
+    {id:'s6',label:'Put/Call 比率',note:'P/C>1.2 反向為正',def:4},
+    {id:'s7',label:'大額選擇權偏態',note:'大戶偏 Call 為正',def:5},
+    {id:'s8',label:'期貨正逆價差',note:'逆價差擴大須注意',def:5},
+  ]},
+  {name:'技術指標',weight:.20,color:'#38bdf8',indicators:[
+    {id:'s9',label:'週KD狀態',note:'週KD金叉為正',def:6},
+    {id:'s10',label:'月線乖離率',note:'乖離過大有壓力',def:5},
+    {id:'s11',label:'MACD 強度',note:'MACD柱轉正為訊號',def:6},
+    {id:'s12',label:'均線多空排列',note:'月>季>年線為多排',def:6},
+  ]},
+  {name:'總體經濟 / 外部環境',weight:.20,color:'#fb923c',indicators:[
+    {id:'s13',label:'台幣匯率趨勢',note:'台幣升值=外資流入',def:6},
+    {id:'s14',label:'美元指數方向',note:'美元走弱利新興市場',def:5},
+    {id:'s15',label:'VIX 恐慌指數',note:'VIX<15正、>30反向正',def:4},
+    {id:'s16',label:'費半 / 那指走勢',note:'費半領先台積電走勢',def:5},
+  ]},
+  {name:'基本面 / 景氣',weight:.10,color:'#34d399',indicators:[
+    {id:'s17',label:'景氣燈號',note:'綠燈以上為正',def:5},
+    {id:'s18',label:'PMI 製造業',note:'PMI>50 為擴張',def:5},
+    {id:'s19',label:'出口訂單年增率',note:'年增率轉正為佳',def:6},
+  ]},
+  {name:'市場流動性',weight:.05,color:'#f472b6',indicators:[
+    {id:'s20',label:'台股成交量能',note:'量大為多方動能',def:5},
+    {id:'s21',label:'ETF 溢價率',note:'折價=機會',def:5},
+    {id:'s22',label:'定期定額趨勢',note:'定期定額穩定增長佳',def:6},
+  ]},
+];
 
-async function loadData() {
-  try {
-    const resp = await fetch('data/model_output.json?t=' + Date.now());
-    if (!resp.ok) throw new Error('model_output.json 未找到');
-    const d = await resp.json();
-    renderAll(d);
-  } catch(e) {
-    document.getElementById('loading').innerHTML =
-      '<div style="font-family:var(--mono);color:var(--bear);font-size:13px;">無法載入 model_output.json<br><span style="color:var(--text3)">請確認檔案已上傳至 data/ 資料夾</span></div>';
+const state={};
+CATEGORIES.forEach(c=>c.indicators.forEach(i=>{state[i.id]=i.def;}));
+
+function getCol(score,max){
+  const p=score/max;
+  if(p>=.65)return{c:'#00e5a0',cls:'c-bull',tag:'t-bull'};
+  if(p<.40)return{c:'#ff4d6a',cls:'c-bear',tag:'t-bear'};
+  if(p<.50)return{c:'#f0c040',cls:'c-caution',tag:'t-caution'};
+  return{c:'#6b8cba',cls:'c-neutral',tag:'t-neutral'};
+}
+
+function calcTotal(){
+  let t=0;
+  CATEGORIES.forEach(cat=>{
+    let s=0; cat.indicators.forEach(i=>s+=state[i.id]);
+    t+=(s/(cat.indicators.length*10))*cat.weight*100;
+  });
+  return Math.round(t);
+}
+
+function getVerdict(score){
+  if(score>=70)return{tag:'積極做多',cls:'t-bull',action:'建議：積極加碼 0050 / 006208（+20~30%）',desc:'多項指標同步偏多，市場動能強勁。可考慮增加持倉，分批佈局降低時間風險。',gc:'#00e5a0'};
+  if(score>=65)return{tag:'多方偏強',cls:'t-bull',action:'建議：小幅加碼（+10%），持續觀察',desc:'多方訊號為主，但尚未達全面做多條件。小幅加碼並緊盯外資動向。',gc:'#00e5a0'};
+  if(score>=45)return{tag:'中性觀望',cls:'t-neutral',action:'建議：維持標準倉位，暫緩加碼',desc:'市場訊號混沌，多空均衡。維持現有倉位，等待方向明朗。',gc:'#6b8cba'};
+  if(score>=35)return{tag:'審慎減碼',cls:'t-caution',action:'建議：減碼 10~20%，控制風險',desc:'負面訊號增多，市場有下行壓力。適度減少持倉，保留現金。',gc:'#f0c040'};
+  return{tag:'空方偏強',cls:'t-bear',action:'建議：大幅減碼或暫時空手',desc:'多項指標同步惡化，下行風險高。大幅降低持倉，等待底部訊號。',gc:'#ff4d6a'};
+}
+
+// ── 監控儀表板渲染 ───────────────────────────────────────────
+function renderHero(){
+  const score=calcTotal();
+  const v=getVerdict(score);
+  const el=document.getElementById('total-score');
+  el.textContent=score;
+  el.style.color=score>=65?'#00e5a0':score<45?score<35?'#ff4d6a':'#f0c040':'#6b8cba';
+  document.getElementById('verdict-tag').textContent=v.tag;
+  document.getElementById('verdict-tag').className='verdict-tag '+v.cls;
+  document.getElementById('verdict-action').textContent=v.action;
+  document.getElementById('verdict-desc').textContent=v.desc;
+  const gf=document.getElementById('gauge-fill');
+  gf.style.width=score+'%';
+  gf.style.background=v.gc;
+}
+
+function renderCats(){
+  const grid=document.getElementById('cats-grid');
+  grid.innerHTML='';
+  CATEGORIES.forEach(cat=>{
+    let sum=0; cat.indicators.forEach(i=>sum+=state[i.id]);
+    const max=cat.indicators.length*10;
+    const pct=Math.round(sum/max*100);
+    const col=getCol(sum,max);
+    let rows='';
+    cat.indicators.forEach(ind=>{
+      const v=state[ind.id];
+      const ic=getCol(v,10);
+      rows+=`<div class="ind-row">
+        <div class="ind-left">
+          <div class="ind-dot" style="background:${ic.c}"></div>
+          <div><div class="ind-label">${ind.label}</div><div class="ind-note">${ind.note}</div></div>
+        </div>
+        <div style="text-align:right;">
+          <div class="ind-score ${ic.cls}">${v}/10</div>
+          <div class="ind-mini"><div class="ind-mini-fill" style="width:${v*10}%;background:${ic.c}"></div></div>
+        </div>
+      </div>`;
+    });
+    const card=document.createElement('div');
+    card.className='cat-card';
+    card.innerHTML=`
+      <div class="cat-head">
+        <div class="cat-name">${cat.name}</div>
+        <div class="cat-wt ${col.tag}">${Math.round(cat.weight*100)}%</div>
+      </div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%;background:${col.c}"></div></div>
+      ${rows}`;
+    grid.appendChild(card);
+  });
+}
+
+function renderSliders(){
+  const wrap=document.getElementById('sliders-wrap');
+  wrap.innerHTML='';
+  CATEGORIES.forEach(cat=>{
+    let rows='';
+    cat.indicators.forEach(ind=>{
+      rows+=`<div class="sl-row">
+        <div><div class="sl-lbl">${ind.label}</div><div class="sl-note">${ind.note}</div></div>
+        <input type="range" min="0" max="10" value="${state[ind.id]}" id="sl_${ind.id}" oninput="updateSlider('${ind.id}',this.value)">
+        <div class="sl-val" id="slv_${ind.id}">${state[ind.id]}</div>
+      </div>`;
+    });
+    const div=document.createElement('div');
+    div.className='slider-section';
+    div.innerHTML=`<div class="sl-title">${cat.name} · 權重 ${Math.round(cat.weight*100)}%</div>${rows}`;
+    wrap.appendChild(div);
+  });
+}
+
+function updateSlider(id,val){
+  state[id]=parseInt(val);
+  const col=getCol(parseInt(val),10);
+  const sv=document.getElementById('slv_'+id);
+  sv.textContent=val; sv.style.color=col.c;
+  renderHero(); renderCats();
+}
+
+function recalcMonitor(){renderHero();renderCats();}
+
+// ── 自動資料載入 ─────────────────────────────────────────────
+async function loadAutoData(){
+  try{
+    const resp=await fetch('data/data.json?t='+Date.now());
+    if(!resp.ok) throw new Error();
+    const d=await resp.json();
+
+    if(d.auto_scores){
+      Object.entries(d.auto_scores).forEach(([k,v])=>{state[k]=v;});
+    }
+    if(d.updated_at){
+      document.getElementById('auto-meta').textContent=`自動更新 ${d.auto_score_count||0} 個指標・${d.updated_at}`;
+      document.getElementById('live-dot').className='live-dot on';
+      document.getElementById('live-time').textContent=d.updated_at.split(' ')[1]||'';
+    }
+
+    // Auto chips
+    const autoItems=[
+      {label:'0050',val:d.etf_0050_price?`NT$${d.etf_0050_price}（${(d.etf_0050_change||0)>0?'+':''}${d.etf_0050_change||0}%）`:'--',pos:(d.etf_0050_change||0)>0},
+      {label:'006208',val:d.etf_006208_price?`NT$${d.etf_006208_price}（${(d.etf_006208_change||0)>0?'+':''}${d.etf_006208_change||0}%）`:'--',pos:(d.etf_006208_change||0)>0},
+      {label:'台幣匯率',val:d.usd_twd?`${d.usd_twd}（${d.twd_trend||'--'}）`:'--',pos:d.twd_trend==='升值'},
+      {label:'VIX',val:d.vix?`${d.vix}（${d.vix_status||''}）`:'--',pos:(d.vix||99)<20},
+      {label:'費半 SOX',val:d.sox?`${d.sox.toLocaleString()}（${(d.sox_change||0)>0?'+':''}${d.sox_change||0}%）`:'--',pos:(d.sox_change||0)>0},
+      {label:'加權指數',val:d.twii?`${d.twii.toLocaleString()}（${(d.twii_change||0)>0?'+':''}${d.twii_change||0}%）`:'--',pos:(d.twii_change||0)>0},
+      {label:'外資買賣超',val:d.foreign_net_buy!=null?`${(d.foreign_net_buy/100000).toFixed(1)}億`:'--',pos:(d.foreign_net_buy||0)>0},
+      {label:'外資期貨',val:d.futures_foreign_net!=null?`${d.futures_foreign_net.toLocaleString()}口`:'--',pos:(d.futures_foreign_net||0)>0},
+    ];
+    const chips=document.getElementById('auto-chips');
+    chips.innerHTML=autoItems.map(it=>`
+      <div class="auto-chip">
+        <span class="ac-lbl">${it.label}</span>
+        <span class="ac-val" style="color:${it.val==='--'?'var(--text3)':it.pos?'var(--bull)':'var(--bear)'}">${it.val}</span>
+      </div>`).join('');
+    document.getElementById('auto-panel').style.display='';
+
+    // Market chips on model page
+    const mc=document.getElementById('market-chips');
+    const mcItems=[
+      {label:'SOX 費半',val:d.sox?d.sox.toLocaleString():'--'},
+      {label:'加權指數',val:d.twii?d.twii.toLocaleString():'--'},
+      {label:'美元 DXY',val:'--'},
+      {label:'台幣匯率',val:d.usd_twd||'--'},
+      {label:'VIX',val:d.vix?`${d.vix}（${d.vix_status||''}）`:'--'},
+      {label:'外資買賣超',val:d.foreign_net_buy!=null?`${(d.foreign_net_buy/100000).toFixed(1)}億`:'--'},
+      {label:'外資期貨',val:d.futures_foreign_net!=null?`${d.futures_foreign_net.toLocaleString()}口`:'--'},
+      {label:'那斯達克',val:d.nasdaq?d.nasdaq.toLocaleString():'--'},
+    ];
+    mc.innerHTML=mcItems.map(it=>`
+      <div class="chip">
+        <div class="chip-lbl">${it.label}</div>
+        <div class="chip-val">${it.val}</div>
+      </div>`).join('');
+
+    recalcMonitor();
+    renderSliders();
+  }catch(e){
+    document.getElementById('live-time').textContent='手動模式';
+    recalcMonitor();
+    renderSliders();
   }
 }
 
-function renderAll(d) {
-  const sig = d.current_signal;
-  const bt  = d.backtest;
-  const isBull = sig.signal === 1;
+// ── 量化模型資料載入 ─────────────────────────────────────────
+let equityChart=null;
 
-  // NAV
-  document.getElementById('nav-date').textContent = '更新：' + d.updated_at;
-  const navSig = document.getElementById('nav-signal');
-  navSig.className = 'signal-pill ' + (isBull ? 'bull' : 'bear');
-  document.getElementById('nav-signal-text').textContent = sig.signal_label;
+async function loadModelData(){
+  try{
+    const resp=await fetch('data/model_output.json?t='+Date.now());
+    if(!resp.ok) throw new Error();
+    const d=await resp.json();
 
-  // Signal hero
-  const sl = document.getElementById('signal-label');
-  sl.textContent = isBull ? '多方' : '空方';
-  sl.className   = 'signal-big ' + (isBull ? 'bull' : 'bear');
-  document.getElementById('signal-date').textContent = '預測日期：' + sig.date;
-  document.getElementById('bull-pct').textContent = `多方 ${sig.bull_prob}%`;
-  document.getElementById('bear-pct').textContent = `空方 ${sig.bear_prob}%`;
-  document.getElementById('prob-bull').style.width = sig.bull_prob + '%';
-  document.getElementById('prob-bear').style.width = sig.bear_prob + '%';
-  document.getElementById('model-name-nav').textContent = d.model_name;
+    const sig=d.current_signal;
+    const bt=d.backtest;
+    const isBull=sig.signal===1;
 
-  // Metrics
-  document.getElementById('m-cagr').textContent    = bt.strategy.cagr + '%';
-  document.getElementById('m-bh-cagr').textContent = bt.buyhold.cagr  + '%';
-  document.getElementById('m-sharpe').textContent  = bt.strategy.sharpe;
-  document.getElementById('m-maxdd').textContent   = bt.strategy.max_dd + '%';
-  document.getElementById('m-winrate').textContent = bt.strategy.win_rate + '%';
-  document.getElementById('m-days').textContent    = d.data_range.days + ' 天';
-  document.getElementById('m-split').textContent   =
-    `訓練 ${d.split.train} ／ 驗證 ${d.split.val} ／ 測試 ${d.split.test}`;
+    document.getElementById('sig-label').textContent=sig.signal_label;
+    document.getElementById('sig-label').className='signal-num '+(isBull?'bull':'bear');
+    document.getElementById('sig-date').textContent='預測日期：'+sig.date;
+    document.getElementById('prob-bull-lbl').textContent=`多方 ${sig.bull_prob}%`;
+    document.getElementById('prob-bear-lbl').textContent=`空方 ${sig.bear_prob}%`;
+    document.getElementById('prob-bull-bar').style.width=sig.bull_prob+'%';
+    document.getElementById('prob-bear-bar').style.width=sig.bear_prob+'%';
+    document.getElementById('best-model-name').textContent=d.model_name;
+    document.getElementById('data-range-txt').textContent=d.data_range.start+' ～ '+d.data_range.end;
+    document.getElementById('latest-date').textContent=sig.date;
 
-  // Model compare
-  const mcList = document.getElementById('model-compare-list');
-  mcList.innerHTML = '';
-  d.model_comparison.forEach(m => {
-    const row = document.createElement('div');
-    row.className = 'model-compare-row';
-    row.innerHTML = `
-      <span class="mc-name">${m.name}${m.is_best ? ' ★' : ''}</span>
-      <div class="mc-vals">
-        <span class="${m.is_best ? 'mc-badge mc-best' : 'mc-ok'}">CV ${m.cv_acc}%</span>
-        <span class="${m.is_best ? 'mc-badge mc-best' : 'mc-ok'}">Val ${m.val_acc}%</span>
-        <span class="${m.is_best ? 'mc-badge mc-best' : 'mc-ok'}">Test ${m.test_acc}%</span>
-      </div>`;
-    mcList.appendChild(row);
-  });
+    document.getElementById('m-cagr').textContent=bt.strategy.cagr+'%';
+    document.getElementById('m-bh').textContent=bt.buyhold.cagr+'%';
+    document.getElementById('m-sharpe').textContent=bt.strategy.sharpe;
+    document.getElementById('m-dd').textContent=bt.strategy.max_dd+'%';
+    document.getElementById('m-wr').textContent=bt.strategy.win_rate+'%';
+    document.getElementById('m-days').textContent=d.data_range.days+'天';
+    document.getElementById('m-split').textContent=`訓練 ${d.split.train} ／ 驗證 ${d.split.val} ／ 測試 ${d.split.test}`;
+    document.getElementById('feat-count').textContent=`核心 ${d.feature_count.core} ／ 次要 ${d.feature_count.secondary} ／ 含滯後共 ${d.feature_count.total}`;
 
-  // Data range & features
-  document.getElementById('data-range').textContent =
-    d.data_range.start + ' ～ ' + d.data_range.end;
-  document.getElementById('feat-count').textContent =
-    `核心 ${d.feature_count.core} ／ 次要 ${d.feature_count.secondary} ／ 合計（含滯後）${d.feature_count.total}`;
+    // Model compare
+    const mc=document.getElementById('model-compare');
+    mc.innerHTML=d.model_comparison.map(m=>`
+      <div class="mc-row">
+        <span style="color:${m.is_best?'var(--text)':'var(--text2)'}">${m.name}${m.is_best?' ★':''}</span>
+        <div class="mc-scores">
+          <span class="mc-badge ${m.is_best?'best-badge':'ok-badge'}">CV ${m.cv_acc}%</span>
+          <span class="mc-badge ${m.is_best?'best-badge':'ok-badge'}">${m.val_acc}%</span>
+          <span class="mc-badge ${m.is_best?'best-badge':'ok-badge'}">${m.test_acc}%</span>
+        </div>
+      </div>`).join('');
 
-  // Equity curve
-  const validCurve = d.equity_curve.filter(p => p.strategy && p.buyhold);
-  const labels  = validCurve.map(p => p.date);
-  const strat   = validCurve.map(p => p.strategy);
-  const bh      = validCurve.map(p => p.buyhold);
-
-  if (equityChart) equityChart.destroy();
-  equityChart = new Chart(document.getElementById('equity-chart'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: '量化策略',
-          data: strat,
-          borderColor: '#00e5a0',
-          borderWidth: 1.5,
-          pointRadius: 0,
-          tension: 0.3,
-          fill: {target: 'origin', above: 'rgba(0,229,160,0.05)'},
-        },
-        {
-          label: '買持0050',
-          data: bh,
-          borderColor: '#3d8eff',
-          borderWidth: 1.5,
-          pointRadius: 0,
-          borderDash: [4, 4],
-          tension: 0.3,
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {display: false},
-        tooltip: {
-          backgroundColor: '#0d1520',
-          borderColor: 'rgba(255,255,255,0.1)',
-          borderWidth: 1,
-          titleColor: '#7a90a8',
-          bodyColor: '#dde6f0',
-          titleFont: {family: 'JetBrains Mono', size: 11},
-          bodyFont:  {family: 'JetBrains Mono', size: 12},
-        }
+    // Equity curve
+    const valid=d.equity_curve.filter(p=>p.strategy&&p.buyhold);
+    if(equityChart)equityChart.destroy();
+    equityChart=new Chart(document.getElementById('equity-chart'),{
+      type:'line',
+      data:{
+        labels:valid.map(p=>p.date),
+        datasets:[
+          {label:'量化策略',data:valid.map(p=>p.strategy),borderColor:'#00e5a0',borderWidth:1.5,pointRadius:0,tension:.3,fill:{target:'origin',above:'rgba(0,229,160,0.05)'}},
+          {label:'買持0050',data:valid.map(p=>p.buyhold),borderColor:'rgba(61,142,255,0.5)',borderWidth:1.5,pointRadius:0,borderDash:[4,4],tension:.3},
+        ]
       },
-      scales: {
-        x: {
-          ticks: {
-            color: '#3a4e62', font: {family: 'JetBrains Mono', size: 10},
-            maxTicksLimit: 8, autoSkip: true,
-          },
-          grid: {color: 'rgba(255,255,255,0.04)'},
-        },
-        y: {
-          ticks: {
-            color: '#3a4e62', font: {family: 'JetBrains Mono', size: 10},
-            callback: v => v.toFixed(2) + 'x',
-          },
-          grid: {color: 'rgba(255,255,255,0.04)'},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#0d1520',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#7a90a8',bodyColor:'#dde6f0',titleFont:{family:'JetBrains Mono',size:10},bodyFont:{family:'JetBrains Mono',size:11}}},
+        scales:{
+          x:{ticks:{color:'#3a4e62',font:{family:'JetBrains Mono',size:10},maxTicksLimit:8,autoSkip:true},grid:{color:'rgba(255,255,255,0.03)'}},
+          y:{ticks:{color:'#3a4e62',font:{family:'JetBrains Mono',size:10},callback:v=>v.toFixed(2)+'x'},grid:{color:'rgba(255,255,255,0.03)'}},
         }
       }
+    });
+
+    // Factors
+    const maxImp=d.factor_importance[0]?.importance||1;
+    const coreFacs=d.factor_importance.filter(f=>f.is_core);
+    const secFacs=d.factor_importance.filter(f=>!f.is_core);
+    function renderFacs(id,facs,isCore){
+      const el=document.getElementById(id);
+      el.innerHTML=facs.map(f=>{
+        const pct=f.importance/maxImp*100;
+        return`<div class="f-row">
+          <div class="f-name">${f.name}</div>
+          <div class="f-track"><div class="f-fill ${isCore?'core':'sec'}" style="width:${pct}%"></div></div>
+          <div class="f-pct ${isCore?'core':'sec'}">${f.pct}%</div>
+        </div>`;
+      }).join('');
     }
-  });
+    renderFacs('core-factors',coreFacs,true);
+    renderFacs('sec-factors',secFacs,false);
 
-  // Factor importance
-  const coreFacs = d.factor_importance.filter(f => f.is_core);
-  const secFacs  = d.factor_importance.filter(f => !f.is_core);
-  const maxImp   = d.factor_importance[0]?.importance || 1;
-
-  function renderFactorList(containerId, factors, isCore) {
-    const el = document.getElementById(containerId);
-    el.innerHTML = '';
-    factors.forEach(f => {
-      const pct = f.importance / maxImp * 100;
-      const row = document.createElement('div');
-      row.className = 'factor-row';
-      row.innerHTML = `
-        <div class="f-name">${f.name}</div>
-        <div class="f-bar-track">
-          <div class="f-bar-fill ${isCore ? 'core-fill' : 'sec-fill'}" style="width:${pct}%"></div>
-        </div>
-        <div class="f-val ${isCore ? 'core-val' : 'sec-val'}">${f.pct}%</div>`;
-      el.appendChild(row);
-    });
+  }catch(e){
+    console.log('model_output.json 未找到：',e);
   }
-  renderFactorList('core-factors', coreFacs, true);
-  renderFactorList('sec-factors', secFacs, false);
-
-  // Latest market data
-  document.getElementById('latest-date').textContent = sig.date;
-  const grid = document.getElementById('latest-data-grid');
-  grid.innerHTML = '';
-  const labelMap = {
-    SOX:    'SOX 費半',
-    US10Y:  '美債10Y殖利率',
-    TWII:   '台灣加權指數',
-    DXY:    '美元指數 DXY',
-    USDTWD: '台幣匯率',
-    VIX:    'VIX 恐慌指數',
-  };
-  // 從 factor_importance 裡的核心因子名稱提取原始因子
-  const rawKeys = ['SOX','US10Y','TWII','DXY','USDTWD','VIX'];
-  rawKeys.forEach(k => {
-    const item = document.createElement('div');
-    item.className = 'data-item';
-    item.innerHTML = `
-      <div class="di-label">${labelMap[k] || k}</div>
-      <div class="di-val" id="di-${k}">--</div>`;
-    grid.appendChild(item);
-  });
-
-  // Hide loading
-  const loading = document.getElementById('loading');
-  loading.style.opacity = '0';
-  setTimeout(() => loading.style.display = 'none', 400);
 }
 
-// 從 fetch_data.py 產生的 data.json 補充最新市場數值
-async function loadMarketData() {
-  try {
-    const resp = await fetch('../data.json?t=' + Date.now());
-    if (!resp.ok) return;
-    const d = await resp.json();
-    const map = {
-      SOX:    d.sox,
-      US10Y:  null,
-      TWII:   d.twii,
-      DXY:    null,
-      USDTWD: d.usd_twd,
-      VIX:    d.vix,
-    };
-    Object.entries(map).forEach(([k, v]) => {
-      const el = document.getElementById('di-' + k);
-      if (el && v != null) el.textContent = typeof v === 'number' ? v.toLocaleString() : v;
-    });
-  } catch(e) {}
+// ── 頁面切換 ─────────────────────────────────────────────────
+function switchPage(name,btn){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
 }
 
-loadData().then(() => loadMarketData());
+function switchInner(name,btn){
+  document.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('inner-cats').style.display=name==='cats'?'':'none';
+  document.getElementById('inner-sliders').style.display=name==='sliders'?'':'none';
+}
+
+// ── 時鐘 ─────────────────────────────────────────────────────
+function updateClock(){
+  const now=new Date();
+  const isWD=now.getDay()>0&&now.getDay()<6;
+  const isMH=now.getHours()>=9&&now.getHours()<14;
+  if(!document.getElementById('auto-panel').style.display||document.getElementById('auto-panel').style.display==='none'){
+    document.getElementById('live-dot').className='live-dot'+(isWD&&isMH?' on':'');
+    const h=String(now.getHours()).padStart(2,'0');
+    const m=String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('live-time').textContent=h+':'+m;
+  }
+}
+
+// ── 初始化 ───────────────────────────────────────────────────
+Promise.all([loadAutoData(), loadModelData()]).then(()=>{
+  const loading=document.getElementById('loading');
+  loading.style.opacity='0';
+  setTimeout(()=>loading.style.display='none',400);
+});
+setInterval(updateClock,30000);
+updateClock();
 </script>
 </body>
 </html>
