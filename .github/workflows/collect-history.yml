@@ -1,0 +1,65 @@
+name: 歷史資料收集（分批）
+
+on:
+  workflow_dispatch:
+    inputs:
+      year:
+        description: '要收集的年份（例如 2020）'
+        required: true
+        default: '2020'
+        type: string
+      year_end:
+        description: '結束年份（留空代表只收集單一年份）'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+
+    steps:
+      - name: 取出程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 計算年份範圍
+        id: years
+        run: |
+          START=${{ github.event.inputs.year }}
+          END=${{ github.event.inputs.year_end }}
+          if [ -z "$END" ]; then
+            END=$START
+          fi
+          echo "start=$START" >> $GITHUB_OUTPUT
+          echo "end=$END" >> $GITHUB_OUTPUT
+          echo "收集年份：$START ～ $END"
+
+      - name: 分年份收集資料
+        run: |
+          START=${{ steps.years.outputs.start }}
+          END=${{ steps.years.outputs.end }}
+          for year in $(seq $START $END); do
+            echo ""
+            echo "════════════════════════════════"
+            echo "開始收集 $year 年資料"
+            echo "════════════════════════════════"
+            python collect_history_actions.py --year $year
+            echo "$year 年完成"
+          done
+
+      - name: 合併所有歷史資料
+        run: python merge_history.py
+
+      - name: 提交資料到 repository
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add data/history/ data/raw_data.csv
+          git diff --staged --quiet || git commit -m "📦 歷史資料更新：${{ github.event.inputs.year }}～${{ github.event.inputs.year_end || github.event.inputs.year }} 年"
+          git push
