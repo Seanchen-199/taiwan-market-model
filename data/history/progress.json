@@ -67,11 +67,12 @@
   },
   "2015": {
     "rows": 260,
-    "cols": 10,
+    "cols": 15,
     "done": true,
-    "updated": "2026-04-16 12:39",
+    "updated": "2026-04-16 13:53",
     "sources": [
-      "yahoo",
+      "inst",
+      "margin",
       "largetrader"
     ]
   },
