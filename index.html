@@ -28,7 +28,7 @@ body::before{
   background-image:linear-gradient(rgba(61,142,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(61,142,255,0.025) 1px,transparent 1px);
   background-size:48px 48px;pointer-events:none;z-index:0;
 }
-
+ 
 /* NAV */
 nav{
   position:sticky;top:0;z-index:200;
@@ -57,14 +57,14 @@ nav{
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--text3);}
 .live-dot.on{background:var(--bull);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
+ 
 /* WRAP */
 .wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:1.5rem 1.5rem 4rem;}
-
+ 
 /* PAGE SECTIONS */
 .page{display:none;}
 .page.active{display:block;}
-
+ 
 /* ══ PAGE 1: 量化模型 ══ */
 .hero-grid{
   display:grid;grid-template-columns:1fr 1fr 1fr;
@@ -90,15 +90,15 @@ nav{
 .mc-badge{padding:2px 6px;border-radius:4px;}
 .best-badge{background:var(--accent2);color:var(--accent);}
 .ok-badge{color:var(--text3);}
-
+ 
 .sec-hd{display:flex;align-items:baseline;gap:10px;margin:2rem 0 1rem;}
 .sec-hd h2{font-family:var(--font-d);font-size:17px;font-weight:700;}
 .sec-hd span{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em;}
-
+ 
 .chart-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1.25rem;}
 .chart-legend{display:flex;gap:14px;margin-bottom:1rem;font-size:12px;color:var(--text2);}
 .leg-dot{display:inline-block;width:8px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle;}
-
+ 
 .factors-2col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem;}
 .factor-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;}
 .fc-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem;padding-bottom:.75rem;border-bottom:1px solid var(--line);}
@@ -112,12 +112,12 @@ nav{
 .f-pct{font-family:var(--mono);font-size:10px;text-align:right;}
 .f-pct.core{color:var(--accent);}
 .f-pct.sec{color:var(--text3);}
-
+ 
 .data-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;margin-top:.875rem;}
 .chip{background:var(--bg3);padding:.875rem 1rem;}
 .chip-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;}
 .chip-val{font-family:var(--mono);font-size:15px;font-weight:600;}
-
+ 
 /* ══ PAGE 2: 監控儀表板 ══ */
 .score-hero{
   display:grid;grid-template-columns:auto 1fr auto;
@@ -141,7 +141,7 @@ nav{
 .zone-bull::before{background:var(--bull);}
 .zone-caution::before{background:var(--caution);}
 .zone-bear::before{background:var(--bear);}
-
+ 
 .cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem;margin-bottom:1.25rem;}
 .cat-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;transition:border-color .2s;}
 .cat-card:hover{border-color:var(--line2);}
@@ -158,7 +158,7 @@ nav{
 .ind-score{font-family:var(--mono);font-size:12px;font-weight:600;}
 .ind-mini{width:48px;height:2px;background:var(--bg4);border-radius:1px;margin-top:3px;margin-left:auto;overflow:hidden;}
 .ind-mini-fill{height:100%;border-radius:1px;}
-
+ 
 .slider-section{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;}
 .sl-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:.875rem;padding-bottom:.75rem;border-bottom:1px solid var(--line);}
 .sl-row{display:grid;grid-template-columns:160px 1fr 32px;align-items:center;gap:10px;padding:5px 0;}
@@ -169,7 +169,7 @@ input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);cursor:pointer;transition:transform .15s;}
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3);}
 input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);cursor:pointer;}
-
+ 
 /* auto data panel */
 .auto-panel{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1.25rem;display:none;}
 .auto-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem;}
@@ -179,13 +179,13 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 .auto-chip{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 12px;display:flex;justify-content:space-between;align-items:center;}
 .ac-lbl{font-size:11px;color:var(--text3);}
 .ac-val{font-family:var(--mono);font-size:12px;font-weight:600;}
-
+ 
 /* tabs inside page */
 .inner-tabs{display:flex;gap:3px;margin-bottom:1.25rem;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm);padding:3px;width:fit-content;}
 .inner-tab{font-family:var(--font-b);font-size:12px;font-weight:500;padding:5px 14px;border-radius:6px;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;}
 .inner-tab:hover{color:var(--text);}
 .inner-tab.active{background:var(--bg4);color:var(--text);border:1px solid var(--line2);}
-
+ 
 /* shared */
 .c-bull{color:var(--bull);}
 .c-bear{color:var(--bear);}
@@ -195,17 +195,17 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 .t-bear{background:rgba(255,77,106,0.1);color:var(--bear);}
 .t-caution{background:rgba(240,192,64,0.1);color:var(--caution);}
 .t-neutral{background:rgba(107,140,186,0.1);color:#6b8cba;}
-
+ 
 .note{margin-top:2.5rem;padding:1rem 1.25rem;border:1px solid var(--line);border-radius:var(--r-sm);}
 .note p{font-size:11px;color:var(--text3);line-height:1.8;text-align:center;}
-
+ 
 /* loading */
 #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .4s;}
 .ld-logo{font-family:var(--font-d);font-size:18px;font-weight:800;letter-spacing:.12em;color:var(--text2);margin-bottom:20px;}
 .ld-bar{width:160px;height:2px;background:var(--bg4);border-radius:1px;overflow:hidden;}
 .ld-fill{height:100%;width:0;background:var(--accent);animation:ldanim 1.4s ease forwards;}
 @keyframes ldanim{to{width:100%}}
-
+ 
 /* responsive */
 @media(max-width:900px){
   .hero-grid{grid-template-columns:1fr;}
@@ -222,12 +222,12 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 </style>
 </head>
 <body>
-
+ 
 <div id="loading">
   <div class="ld-logo">台股<em style="color:var(--accent)">量化</em>系統</div>
   <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
-
+ 
 <nav>
   <div class="nav-logo">台股<em>量化</em>分析系統</div>
   <div class="nav-tabs">
@@ -242,14 +242,14 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
     </div>
   </div>
 </nav>
-
+ 
 <div class="wrap">
-
+ 
 <!-- ══════════════════════════════════════
      PAGE 1: 量化模型
 ══════════════════════════════════════ -->
 <div class="page active" id="page-model">
-
+ 
   <div class="hero-grid">
     <!-- 訊號 -->
     <div class="hero-cell">
@@ -295,7 +295,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       </div>
     </div>
   </div>
-
+ 
   <!-- 淨值曲線 -->
   <div class="sec-hd"><h2>回測淨值曲線</h2><span>EQUITY CURVE</span></div>
   <div class="chart-card">
@@ -307,7 +307,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       <canvas id="equity-chart" role="img" aria-label="回測淨值曲線比較量化策略與買持0050"></canvas>
     </div>
   </div>
-
+ 
   <!-- 因子重要性 -->
   <div class="sec-hd"><h2>因子重要性</h2><span>FACTOR IMPORTANCE</span></div>
   <div class="factors-2col">
@@ -320,21 +320,60 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       <div id="sec-factors"></div>
     </div>
   </div>
-
+ 
   <!-- 最新市場數據 -->
   <div class="sec-hd"><h2>最新市場數據</h2><span>LATEST DATA</span></div>
   <div class="chart-card">
     <div style="font-size:12px;color:var(--text3);">資料日期：<span id="latest-date" style="color:var(--text2)">--</span></div>
     <div class="data-chips" id="market-chips"></div>
   </div>
-
+ 
 </div><!-- /page-model -->
-
+ 
 <!-- ══════════════════════════════════════
      PAGE 2: 監控儀表板
 ══════════════════════════════════════ -->
 <div class="page" id="page-monitor">
-
+ 
+  <!-- 量化模型 vs 監控儀表板 對照區 -->
+  <div id="model-compare-panel" style="display:none;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;margin-bottom:1.25rem;">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem;">兩套系統訊號對照</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+      <!-- 量化模型訊號 -->
+      <div style="background:var(--bg3);border:1px solid var(--line);border-radius:var(--r-sm);padding:1rem;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">量化模型（機器學習）</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+          <div style="font-family:var(--font-d);font-size:28px;font-weight:700;" id="cp-model-signal">--</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--text2);" id="cp-model-prob">--</div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);">模型：<span id="cp-model-name" style="color:var(--text2)">--</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">預測日：<span id="cp-model-date" style="color:var(--text2)">--</span></div>
+        <!-- 多空機率條 -->
+        <div style="margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px;">
+            <span id="cp-bull-lbl">多方</span><span id="cp-bear-lbl">空方</span>
+          </div>
+          <div style="height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;display:flex;">
+            <div id="cp-bull-bar" style="height:100%;border-radius:2px 0 0 2px;transition:width .6s;background:#00e5a0;"></div>
+            <div id="cp-bear-bar" style="height:100%;border-radius:0 2px 2px 0;transition:width .6s;background:#ff4d6a;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- 監控儀表板評分 -->
+      <div style="background:var(--bg3);border:1px solid var(--line);border-radius:var(--r-sm);padding:1rem;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">監控儀表板（多因子評分）</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+          <div style="font-family:var(--font-d);font-size:28px;font-weight:700;" id="cp-dash-signal">--</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--text2);" id="cp-dash-score">--</div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);">自動更新指標：<span id="cp-dash-auto" style="color:var(--text2)">--</span> 個</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">手動指標：<span style="color:var(--text2)">16 個</span></div>
+      </div>
+    </div>
+    <!-- 綜合結論 -->
+    <div id="cp-conclusion" style="background:var(--bg3);border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.7;border-left:2px solid var(--line2);border-radius:0;"></div>
+  </div>
+ 
   <!-- 即時資料看板 -->
   <div class="auto-panel" id="auto-panel">
     <div class="auto-head">
@@ -343,7 +382,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
     </div>
     <div class="auto-chips" id="auto-chips"></div>
   </div>
-
+ 
   <!-- 評分 Hero -->
   <div class="score-hero">
     <div style="text-align:center;min-width:110px;">
@@ -366,30 +405,30 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       </div>
     </div>
   </div>
-
+ 
   <!-- 內部分頁 -->
   <div class="inner-tabs">
     <button class="inner-tab active" onclick="switchInner('cats',this)">指標總覽</button>
     <button class="inner-tab" onclick="switchInner('sliders',this)">手動調整</button>
   </div>
-
+ 
   <div id="inner-cats">
     <div class="cats-grid" id="cats-grid"></div>
   </div>
-
+ 
   <div id="inner-sliders" style="display:none;">
     <div id="sliders-wrap"></div>
   </div>
-
+ 
 </div><!-- /page-monitor -->
-
+ 
 <!-- ══════════════════════════════════════
      PAGE 3: 操作說明
 ══════════════════════════════════════ -->
 <div class="page" id="page-guide">
   <div class="sec-hd"><h2>加減碼規則</h2><span>SIGNAL GUIDE</span></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;">
-
+ 
     <div class="chart-card">
       <div class="h-label" style="margin-bottom:.75rem;">評分區間對照</div>
       <div class="ind-row"><span class="ind-label">總分 ≥ 70</span><span class="c-bull" style="font-size:13px;font-weight:500;">積極加碼 +20~30%</span></div>
@@ -398,14 +437,14 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       <div class="ind-row"><span class="ind-label">總分 35~44</span><span class="c-caution" style="font-size:13px;font-weight:500;">減碼 10~20%</span></div>
       <div class="ind-row"><span class="ind-label">總分 &lt; 35</span><span class="c-bear" style="font-size:13px;font-weight:500;">大幅減碼或空手</span></div>
     </div>
-
+ 
     <div class="chart-card">
       <div class="h-label" style="margin-bottom:.75rem;">台幣匯率</div>
       <div class="ind-row"><span class="ind-label">台幣持續升值</span><span class="c-bull" style="font-size:12px;">外資匯入，正面訊號</span></div>
       <div class="ind-row"><span class="ind-label">台幣急速貶值</span><span class="c-bear" style="font-size:12px;">外資撤退警訊</span></div>
       <div class="ind-row"><span class="ind-label">波動劇烈</span><span class="c-caution" style="font-size:12px;">不確定性高，觀望</span></div>
     </div>
-
+ 
     <div class="chart-card">
       <div class="h-label" style="margin-bottom:.75rem;">VIX 恐慌指數</div>
       <div class="ind-row"><span class="ind-label">VIX &lt; 15</span><span class="c-bull" style="font-size:12px;">市場平靜，正面</span></div>
@@ -413,14 +452,14 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       <div class="ind-row"><span class="ind-label">VIX 25~35</span><span class="c-caution" style="font-size:12px;">市場恐慌，觀望</span></div>
       <div class="ind-row"><span class="ind-label">VIX &gt; 35</span><span class="c-bull" style="font-size:12px;">極度恐慌，逢低機會</span></div>
     </div>
-
+ 
     <div class="chart-card">
       <div class="h-label" style="margin-bottom:.75rem;">Put/Call Ratio</div>
       <div class="ind-row"><span class="ind-label">P/C &gt; 1.5</span><span class="c-bull" style="font-size:12px;">悲觀過度，反向加碼</span></div>
       <div class="ind-row"><span class="ind-label">P/C 1.0~1.5</span><span class="c-neutral" style="font-size:12px;">市場偏保守</span></div>
       <div class="ind-row"><span class="ind-label">P/C &lt; 0.7</span><span class="c-bear" style="font-size:12px;">過度樂觀，減碼訊號</span></div>
     </div>
-
+ 
     <div class="chart-card">
       <div class="h-label" style="margin-bottom:.75rem;">景氣燈號</div>
       <div class="ind-row"><span class="ind-label">紅燈（過熱）</span><span class="c-caution" style="font-size:12px;">景氣過熱，減碼</span></div>
@@ -428,7 +467,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       <div class="ind-row"><span class="ind-label">黃藍燈</span><span class="c-caution" style="font-size:12px;">景氣轉弱，觀察</span></div>
       <div class="ind-row"><span class="ind-label">藍燈（衰退）</span><span class="c-bear" style="font-size:12px;">景氣衰退，避險</span></div>
     </div>
-
+ 
     <div class="chart-card">
       <div class="h-label" style="margin-bottom:.75rem;">量化模型說明</div>
       <div class="ind-row"><span class="ind-label">核心因子</span><span style="font-size:11px;color:var(--text2);">SOX、美債、DXY、匯率等</span></div>
@@ -436,16 +475,16 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
       <div class="ind-row"><span class="ind-label">模型更新</span><span style="font-size:11px;color:var(--text2);">每週自動重新訓練</span></div>
       <div class="ind-row"><span class="ind-label">訊號解讀</span><span style="font-size:11px;color:var(--text2);">多方機率 &gt;60% 為做多訊號</span></div>
     </div>
-
+ 
   </div>
   <div class="note" style="margin-top:2rem;">
     <p>本系統為個人量化研究工具，所有模型預測與評分結果僅供參考，不構成投資建議。<br>
     歷史回測績效不代表未來表現，投資一定有風險，本金可能損失。</p>
   </div>
 </div><!-- /page-guide -->
-
+ 
 </div><!-- /wrap -->
-
+ 
 <script>
 // ── 狀態 ────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -484,10 +523,10 @@ const CATEGORIES = [
     {id:'s22',label:'定期定額趨勢',note:'定期定額穩定增長佳',def:6},
   ]},
 ];
-
+ 
 const state={};
 CATEGORIES.forEach(c=>c.indicators.forEach(i=>{state[i.id]=i.def;}));
-
+ 
 function getCol(score,max){
   const p=score/max;
   if(p>=.65)return{c:'#00e5a0',cls:'c-bull',tag:'t-bull'};
@@ -495,7 +534,7 @@ function getCol(score,max){
   if(p<.50)return{c:'#f0c040',cls:'c-caution',tag:'t-caution'};
   return{c:'#6b8cba',cls:'c-neutral',tag:'t-neutral'};
 }
-
+ 
 function calcTotal(){
   let t=0;
   CATEGORIES.forEach(cat=>{
@@ -504,7 +543,7 @@ function calcTotal(){
   });
   return Math.round(t);
 }
-
+ 
 function getVerdict(score){
   if(score>=70)return{tag:'積極做多',cls:'t-bull',action:'建議：積極加碼 0050 / 006208（+20~30%）',desc:'多項指標同步偏多，市場動能強勁。可考慮增加持倉，分批佈局降低時間風險。',gc:'#00e5a0'};
   if(score>=65)return{tag:'多方偏強',cls:'t-bull',action:'建議：小幅加碼（+10%），持續觀察',desc:'多方訊號為主，但尚未達全面做多條件。小幅加碼並緊盯外資動向。',gc:'#00e5a0'};
@@ -512,7 +551,7 @@ function getVerdict(score){
   if(score>=35)return{tag:'審慎減碼',cls:'t-caution',action:'建議：減碼 10~20%，控制風險',desc:'負面訊號增多，市場有下行壓力。適度減少持倉，保留現金。',gc:'#f0c040'};
   return{tag:'空方偏強',cls:'t-bear',action:'建議：大幅減碼或暫時空手',desc:'多項指標同步惡化，下行風險高。大幅降低持倉，等待底部訊號。',gc:'#ff4d6a'};
 }
-
+ 
 // ── 監控儀表板渲染 ───────────────────────────────────────────
 function renderHero(){
   const score=calcTotal();
@@ -528,7 +567,7 @@ function renderHero(){
   gf.style.width=score+'%';
   gf.style.background=v.gc;
 }
-
+ 
 function renderCats(){
   const grid=document.getElementById('cats-grid');
   grid.innerHTML='';
@@ -564,7 +603,7 @@ function renderCats(){
     grid.appendChild(card);
   });
 }
-
+ 
 function renderSliders(){
   const wrap=document.getElementById('sliders-wrap');
   wrap.innerHTML='';
@@ -583,7 +622,7 @@ function renderSliders(){
     wrap.appendChild(div);
   });
 }
-
+ 
 function updateSlider(id,val){
   state[id]=parseInt(val);
   const col=getCol(parseInt(val),10);
@@ -591,16 +630,16 @@ function updateSlider(id,val){
   sv.textContent=val; sv.style.color=col.c;
   renderHero(); renderCats();
 }
-
+ 
 function recalcMonitor(){renderHero();renderCats();}
-
+ 
 // ── 自動資料載入 ─────────────────────────────────────────────
 async function loadAutoData(){
   try{
     const resp=await fetch('data/data.json?t='+Date.now());
     if(!resp.ok) throw new Error();
     const d=await resp.json();
-
+ 
     if(d.auto_scores){
       Object.entries(d.auto_scores).forEach(([k,v])=>{state[k]=v;});
     }
@@ -609,7 +648,7 @@ async function loadAutoData(){
       document.getElementById('live-dot').className='live-dot on';
       document.getElementById('live-time').textContent=d.updated_at.split(' ')[1]||'';
     }
-
+ 
     // Auto chips
     const autoItems=[
       {label:'0050',val:d.etf_0050_price?`NT$${d.etf_0050_price}（${(d.etf_0050_change||0)>0?'+':''}${d.etf_0050_change||0}%）`:'--',pos:(d.etf_0050_change||0)>0},
@@ -628,7 +667,7 @@ async function loadAutoData(){
         <span class="ac-val" style="color:${it.val==='--'?'var(--text3)':it.pos?'var(--bull)':'var(--bear)'}">${it.val}</span>
       </div>`).join('');
     document.getElementById('auto-panel').style.display='';
-
+ 
     // Market chips on model page
     const mc=document.getElementById('market-chips');
     const mcItems=[
@@ -646,7 +685,7 @@ async function loadAutoData(){
         <div class="chip-lbl">${it.label}</div>
         <div class="chip-val">${it.val}</div>
       </div>`).join('');
-
+ 
     recalcMonitor();
     renderSliders();
   }catch(e){
@@ -655,20 +694,20 @@ async function loadAutoData(){
     renderSliders();
   }
 }
-
+ 
 // ── 量化模型資料載入 ─────────────────────────────────────────
 let equityChart=null;
-
+ 
 async function loadModelData(){
   try{
     const resp=await fetch('data/model_output.json?t='+Date.now());
     if(!resp.ok) throw new Error();
     const d=await resp.json();
-
+ 
     const sig=d.current_signal;
     const bt=d.backtest;
     const isBull=sig.signal===1;
-
+ 
     document.getElementById('sig-label').textContent=sig.signal_label;
     document.getElementById('sig-label').className='signal-num '+(isBull?'bull':'bear');
     document.getElementById('sig-date').textContent='預測日期：'+sig.date;
@@ -679,7 +718,7 @@ async function loadModelData(){
     document.getElementById('best-model-name').textContent=d.model_name;
     document.getElementById('data-range-txt').textContent=d.data_range.start+' ～ '+d.data_range.end;
     document.getElementById('latest-date').textContent=sig.date;
-
+ 
     document.getElementById('m-cagr').textContent=bt.strategy.cagr+'%';
     document.getElementById('m-bh').textContent=bt.buyhold.cagr+'%';
     document.getElementById('m-sharpe').textContent=bt.strategy.sharpe;
@@ -688,7 +727,7 @@ async function loadModelData(){
     document.getElementById('m-days').textContent=d.data_range.days+'天';
     document.getElementById('m-split').textContent=`訓練 ${d.split.train} ／ 驗證 ${d.split.val} ／ 測試 ${d.split.test}`;
     document.getElementById('feat-count').textContent=`核心 ${d.feature_count.core} ／ 次要 ${d.feature_count.secondary} ／ 含滯後共 ${d.feature_count.total}`;
-
+ 
     // Model compare
     const mc=document.getElementById('model-compare');
     mc.innerHTML=d.model_comparison.map(m=>`
@@ -700,7 +739,7 @@ async function loadModelData(){
           <span class="mc-badge ${m.is_best?'best-badge':'ok-badge'}">${m.test_acc}%</span>
         </div>
       </div>`).join('');
-
+ 
     // Equity curve
     const valid=d.equity_curve.filter(p=>p.strategy&&p.buyhold);
     if(equityChart)equityChart.destroy();
@@ -722,7 +761,7 @@ async function loadModelData(){
         }
       }
     });
-
+ 
     // Factors
     const maxImp=d.factor_importance[0]?.importance||1;
     const coreFacs=d.factor_importance.filter(f=>f.is_core);
@@ -740,12 +779,73 @@ async function loadModelData(){
     }
     renderFacs('core-factors',coreFacs,true);
     renderFacs('sec-factors',secFacs,false);
-
+ 
+    // ── 更新監控頁面的對照面板 ──────────────────────────────
+    updateComparePanel(d);
+ 
   }catch(e){
     console.log('model_output.json 未找到：',e);
   }
 }
-
+ 
+function updateComparePanel(modelData) {
+  const panel = document.getElementById('model-compare-panel');
+  if (!panel || !modelData) return;
+  panel.style.display = '';
+ 
+  const sig   = modelData.current_signal;
+  const isBull = sig.signal === 1;
+  const bullProb = sig.bull_prob;
+  const bearProb = sig.bear_prob;
+ 
+  // 量化模型區塊
+  const sigEl = document.getElementById('cp-model-signal');
+  sigEl.textContent = sig.signal_label;
+  sigEl.style.color = isBull ? '#00e5a0' : '#ff4d6a';
+ 
+  document.getElementById('cp-model-prob').textContent = `機率 ${bullProb}%`;
+  document.getElementById('cp-model-name').textContent = modelData.model_name || '--';
+  document.getElementById('cp-model-date').textContent = sig.date || '--';
+  document.getElementById('cp-bull-lbl').textContent = `多方 ${bullProb}%`;
+  document.getElementById('cp-bear-lbl').textContent = `空方 ${bearProb}%`;
+  document.getElementById('cp-bull-bar').style.width = bullProb + '%';
+  document.getElementById('cp-bear-bar').style.width = bearProb + '%';
+ 
+  // 結論邏輯（在 renderHero 後呼叫，所以可以讀取 calcTotal()）
+  setTimeout(() => {
+    const dashScore = calcTotal();
+    const dashIsBull = dashScore >= 55;
+    const dashLabel  = dashScore >= 65 ? '積極做多' : dashScore >= 45 ? '中性觀望' : '偏空謹慎';
+    const dashColor  = dashScore >= 65 ? '#00e5a0' : dashScore < 45 ? '#ff4d6a' : '#6b8cba';
+ 
+    document.getElementById('cp-dash-signal').textContent = dashLabel;
+    document.getElementById('cp-dash-signal').style.color = dashColor;
+    document.getElementById('cp-dash-score').textContent = `${dashScore} 分`;
+    document.getElementById('cp-dash-auto').textContent =
+      modelData.auto_score_count || document.querySelectorAll('#auto-chips .auto-chip').length || '--';
+ 
+    // 綜合結論
+    const conclude = document.getElementById('cp-conclusion');
+    const bothBull  = isBull && dashScore >= 55;
+    const bothBear  = !isBull && dashScore < 45;
+    const conflict  = (isBull && dashScore < 45) || (!isBull && dashScore >= 65);
+ 
+    if (bothBull) {
+      conclude.style.borderLeftColor = '#00e5a0';
+      conclude.innerHTML = '<span style="color:#00e5a0;font-weight:500;">兩套系統一致看多</span>　量化模型與監控儀表板均偏多方，訊號一致性高，可考慮加碼 0050 / 006208，但仍建議分批佈局、設好停損。';
+    } else if (bothBear) {
+      conclude.style.borderLeftColor = '#ff4d6a';
+      conclude.innerHTML = '<span style="color:#ff4d6a;font-weight:500;">兩套系統一致看空</span>　量化模型與監控儀表板均偏空方，訊號一致性高，建議減碼或保守持倉，等待多方訊號出現後再行動。';
+    } else if (conflict) {
+      conclude.style.borderLeftColor = '#f0c040';
+      conclude.innerHTML = '<span style="color:#f0c040;font-weight:500;">兩套系統出現分歧</span>　量化模型與監控儀表板方向不一致，代表市場訊號混沌。建議維持現有倉位，不加碼也不急著減碼，等待兩套系統方向趨同後再決策。';
+    } else {
+      conclude.style.borderLeftColor = '#6b8cba';
+      conclude.innerHTML = '<span style="color:#6b8cba;font-weight:500;">訊號中性</span>　兩套系統目前均處於中性區間，無明確方向訊號，維持標準倉位觀望。';
+    }
+  }, 100);
+}
+ 
 // ── 頁面切換 ─────────────────────────────────────────────────
 function switchPage(name,btn){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
@@ -753,14 +853,14 @@ function switchPage(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
 }
-
+ 
 function switchInner(name,btn){
   document.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('inner-cats').style.display=name==='cats'?'':'none';
   document.getElementById('inner-sliders').style.display=name==='sliders'?'':'none';
 }
-
+ 
 // ── 時鐘 ─────────────────────────────────────────────────────
 function updateClock(){
   const now=new Date();
@@ -773,7 +873,7 @@ function updateClock(){
     document.getElementById('live-time').textContent=h+':'+m;
   }
 }
-
+ 
 // ── 初始化 ───────────────────────────────────────────────────
 Promise.all([loadAutoData(), loadModelData()]).then(()=>{
   const loading=document.getElementById('loading');
