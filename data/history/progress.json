@@ -194,10 +194,12 @@
   },
   "2025": {
     "rows": 258,
-    "cols": 15,
+    "cols": 20,
     "done": true,
-    "updated": "2026-04-17 05:48",
+    "updated": "2026-04-17 07:49",
     "sources": [
+      "inst",
+      "margin",
       "TXF",
       "MXF",
       "largetrader",
@@ -206,10 +208,12 @@
   },
   "2026": {
     "rows": 76,
-    "cols": 15,
+    "cols": 20,
     "done": true,
-    "updated": "2026-04-17 05:53",
+    "updated": "2026-04-17 07:56",
     "sources": [
+      "inst",
+      "margin",
       "TXF",
       "MXF",
       "largetrader",
