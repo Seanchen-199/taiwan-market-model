@@ -180,20 +180,40 @@
   },
   "2024": {
     "rows": 261,
-    "cols": 15,
+    "cols": 20,
     "done": true,
-    "updated": "2026-04-16 11:38"
+    "updated": "2026-04-17 05:43",
+    "sources": [
+      "inst",
+      "margin",
+      "TXF",
+      "MXF",
+      "largetrader",
+      "option"
+    ]
   },
   "2025": {
     "rows": 258,
     "cols": 15,
     "done": true,
-    "updated": "2026-04-16 11:42"
+    "updated": "2026-04-17 05:48",
+    "sources": [
+      "TXF",
+      "MXF",
+      "largetrader",
+      "option"
+    ]
   },
   "2026": {
-    "rows": 75,
+    "rows": 76,
     "cols": 15,
     "done": true,
-    "updated": "2026-04-16 11:45"
+    "updated": "2026-04-17 05:53",
+    "sources": [
+      "TXF",
+      "MXF",
+      "largetrader",
+      "option"
+    ]
   }
 }
