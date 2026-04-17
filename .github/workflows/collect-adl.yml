@@ -1,0 +1,29 @@
+name: 藤落線歷史資料收集
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch-adl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+
+    steps:
+      - name: 取出程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 收集藤落線歷史資料
+        run: python fetch_adl.py
+
+      - name: 提交資料
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add data/adl_data.csv
+          git diff --staged --quiet || git commit -m "📊 藤落線歷史資料更新：$(date '+%Y/%m/%d')"
+          git push
