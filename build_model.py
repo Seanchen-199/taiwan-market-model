@@ -93,15 +93,40 @@ for col in LAG_COLS:
 drop_raw = [c for c in PRICE_COLS if c in feat_df.columns]
 feat_df  = feat_df.drop(columns=drop_raw, errors='ignore')
 
-# 2d. 移除缺值
-target = df['target_signal'].copy()
-combined = feat_df.join(target).dropna()
+# 清理 Infinity 和極端值
+feat_df = feat_df.replace([float('inf'), float('-inf')], float('nan'))
+for col in feat_df.columns:
+    try:
+        q_low  = feat_df[col].quantile(0.001)
+        q_high = feat_df[col].quantile(0.999)
+        feat_df[col] = feat_df[col].clip(lower=q_low, upper=q_high)
+    except:
+        pass
+
+# 2d. 缺值處理策略：
+#   - 核心市場因子（SOX、TWII、DXY 等）：dropna，這些缺值代表真正沒有交易日
+#   - 法人籌碼因子（三大法人、融資等）：填 0（代表無資料，中性訊號）
+#     這樣 2004～2011 的樣本不會被丟棄，模型會學到「0 = 無此訊號」
+MUST_HAVE = [c for c in feat_df.columns
+             if any(k in c for k in ['SOX','TWII','DXY','USDTWD','US10Y',
+                                      'NASDAQ','VIX','RSI','MACD','MA5'])]
+FILL_ZERO = [c for c in feat_df.columns if c not in MUST_HAVE]
+
+# 法人籌碼相關欄位填 0
+feat_df[FILL_ZERO] = feat_df[FILL_ZERO].fillna(0)
+
+# 2e. 移除缺值（只針對必要欄位）
+target   = df['target_signal'].copy()
+combined = feat_df.join(target)
+combined = combined.dropna(subset=MUST_HAVE + ['target_signal'])
 feat_df  = combined.drop(columns=['target_signal'])
 target   = combined['target_signal']
 
 feature_cols = feat_df.columns.tolist()
 print(f"  特徵數量（含滯後）：{len(feature_cols)}")
 print(f"  有效樣本數：{len(feat_df)}")
+print(f"  填 0 處理欄位：{len(FILL_ZERO)} 個（法人籌碼類）")
+print(f"  日期範圍：{feat_df.index[0].date()} ～ {feat_df.index[-1].date()}")
 
 # 2e. 共線性偵測（VIF 簡化版）
 print("\n  共線性檢測（相關係數 > 0.9 的配對）：")
@@ -219,47 +244,57 @@ print("\n" + "=" * 50)
 print("【6】滾動式回測")
 print("=" * 50)
 
-def rolling_backtest(X, y, price_series, window=252, step=21):
+def rolling_backtest(X, y, price_series, window=504, step=21):
     """
     滾動式回測
-    window：訓練窗口（約1年交易日）
+    window：訓練窗口（504 = 約2年交易日，比原本1年更穩定）
     step：每次前進天數（約1個月）
+    策略：多方訊號持有，空方訊號空手（不做空）
     """
-    signals   = []
     returns   = []
     dates     = []
     prices    = price_series.reindex(X.index).ffill()
 
     for start in range(0, len(X) - window - step, step):
-        end     = start + window
-        X_tr    = X.iloc[start:end]
-        y_tr    = y.iloc[start:end]
-        X_fw    = X.iloc[end:end+step]
-        y_fw    = y.iloc[end:end+step]
-        p_fw    = prices.iloc[end:end+step]
+        end  = start + window
+        X_tr = X.iloc[start:end]
+        y_tr = y.iloc[start:end]
+        X_fw = X.iloc[end:end+step]
+        p_fw = prices.iloc[end:end+step]
 
-        if len(X_tr) < 60 or len(X_fw) == 0:
+        if len(X_tr) < 120 or len(X_fw) == 0:
             continue
 
-        m = GradientBoostingClassifier(n_estimators=50, max_depth=3,
-                                        learning_rate=0.05, random_state=42)
+        # 確保訓練集有兩種標籤
+        if y_tr.nunique() < 2:
+            continue
+
+        m = GradientBoostingClassifier(
+            n_estimators=100, max_depth=3,
+            learning_rate=0.05, random_state=42,
+            subsample=0.8
+        )
         try:
             m.fit(X_tr, y_tr)
             preds = m.predict(X_fw)
+            proba = m.predict_proba(X_fw)
+            bull_col = list(m.classes_).index(1) if 1 in m.classes_ else 0
         except:
             continue
 
-        # 計算策略報酬
         for i in range(len(X_fw) - 1):
             if i >= len(p_fw) - 1:
                 break
             raw_ret = (p_fw.iloc[i+1] - p_fw.iloc[i]) / p_fw.iloc[i]
-            sig     = 1 if preds[i] == 1 else 0  # 多 or 空手
-            signals.append(int(preds[i]))
+            # 只有多方訊號且機率 > 55% 才持有，否則空手
+            bull_prob = proba[i][bull_col] if len(proba) > i else 0.5
+            sig = 1 if (preds[i] == 1 and bull_prob > 0.55) else 0
             returns.append(raw_ret * sig)
             dates.append(X_fw.index[i])
 
-    return pd.Series(returns, index=dates), pd.Series(signals, index=dates)
+    return pd.Series(returns, index=dates), pd.Series(
+        [1 if r != 0 else 0 for r in returns], index=dates
+    )
 
 # 使用 0050 價格做回測
 price_col = 'ETF0050' if 'ETF0050' in df.columns else 'TWII'
@@ -413,6 +448,21 @@ output = {
 }
 
 os.makedirs('data', exist_ok=True)
+# 清理 NaN / Infinity（JSON 不支援這些值）
+def clean_for_json(obj):
+    import math
+    if isinstance(obj, dict):
+        return {k: clean_for_json(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [clean_for_json(v) for v in obj]
+    elif isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return None
+        return round(obj, 6)
+    return obj
+
+output = clean_for_json(output)
+
 with open('data/model_output.json', 'w', encoding='utf-8') as f:
     json.dump(output, f, ensure_ascii=False, indent=2)
 
