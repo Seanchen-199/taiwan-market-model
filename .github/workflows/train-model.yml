@@ -1,0 +1,68 @@
+name: 每日更新資料 + 每週重訓模型
+ 
+on:
+  schedule:
+    # 每天台灣時間 15:30 收盤後更新資料（UTC 07:30）
+    - cron: '30 7 * * 1-5'
+    # 每週日台灣時間 02:00 重新訓練模型（UTC 週六 18:00）
+    - cron: '0 18 * * 6'
+  workflow_dispatch:
+    inputs:
+      retrain:
+        description: '是否重新訓練模型？'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+ 
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+ 
+    steps:
+      - name: 取出程式碼
+        uses: actions/checkout@v4
+ 
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+ 
+      - name: 判斷是否需要重新訓練
+        id: check
+        run: |
+          # 週六觸發 or 手動選擇 retrain=true 時重新訓練
+          DAY=$(date +%u)
+          MANUAL="${{ github.event.inputs.retrain }}"
+          if [ "$DAY" = "6" ] || [ "$MANUAL" = "true" ]; then
+            echo "retrain=true" >> $GITHUB_OUTPUT
+            echo "模式：重新訓練模型"
+          else
+            echo "retrain=false" >> $GITHUB_OUTPUT
+            echo "模式：只更新資料"
+          fi
+ 
+      - name: 更新資料（每天）
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ "${{ steps.check.outputs.retrain }}" = "true" ]; then
+            python update_and_train.py --retrain
+          else
+            python update_and_train.py
+          fi
+ 
+      - name: 執行每日市場資料抓取
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python fetch_data.py
+ 
+      - name: 提交所有更新
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add data/raw_data.csv data/data.json
+          git add data/model_output.json || true
+          git diff --staged --quiet || git commit -m "📊 自動更新：$(date '+%Y/%m/%d %H:%M') 台灣時間"
+          git push
