@@ -825,19 +825,27 @@ function updateComparePanel(modelData) {
     modelData.auto_score_count || '--';
 
   const conclude = document.getElementById('cp-conclusion');
-  const bothBull  = isBull && dashScore >= 55;
-  const bothBear  = !isBull && dashScore < 45;
-  const conflict  = (isBull && dashScore < 45) || (!isBull && dashScore >= 65);
+  const bothBull  = isBull && dashScore >= 50;
+  const bothBear  = !isBull && dashScore <= 50;
+  const modelBullDashNeutral = isBull && dashScore > 45 && dashScore < 65;
+  const modelBearDashNeutral = !isBull && dashScore >= 45 && dashScore <= 55;
+  const conflict  = (isBull && dashScore < 45) || (!isBull && dashScore > 55);
 
-  if (bothBull) {
-    conclude.style.borderLeftColor = '#00e5a0';
-    conclude.innerHTML = '<span style="color:#00e5a0;font-weight:500;">兩套系統一致看多</span>　量化模型與監控儀表板均偏多方，訊號一致性高，可考慮加碼 0050 / 006208，但仍建議分批佈局、設好停損。';
-  } else if (bothBear) {
+  if (conflict) {
     conclude.style.borderLeftColor = '#ff4d6a';
-    conclude.innerHTML = '<span style="color:#ff4d6a;font-weight:500;">兩套系統一致看空</span>　量化模型與監控儀表板均偏空方，訊號一致性高，建議減碼或保守持倉，等待多方訊號出現後再行動。';
-  } else if (conflict) {
+    conclude.innerHTML = '<span style="color:#ff4d6a;font-weight:500;">兩套系統明顯分歧</span>　量化模型與監控儀表板方向相反，訊號互相矛盾。建議維持現有倉位，等待兩套系統方向趨同後再行動，切勿在分歧時大幅加減碼。';
+  } else if (isBull && dashScore >= 65) {
+    conclude.style.borderLeftColor = '#00e5a0';
+    conclude.innerHTML = '<span style="color:#00e5a0;font-weight:500;">兩套系統一致看多</span>　量化模型與監控儀表板均強烈偏多，訊號一致性高，可考慮加碼 0050 / 006208，建議分批佈局並設好停損點。';
+  } else if (!isBull && dashScore < 45) {
+    conclude.style.borderLeftColor = '#ff4d6a';
+    conclude.innerHTML = '<span style="color:#ff4d6a;font-weight:500;">兩套系統一致看空</span>　量化模型與監控儀表板均偏空方，建議減碼或保守持倉，等待多方訊號出現後再行動。';
+  } else if (modelBullDashNeutral) {
     conclude.style.borderLeftColor = '#f0c040';
-    conclude.innerHTML = '<span style="color:#f0c040;font-weight:500;">兩套系統出現分歧</span>　量化模型與監控儀表板方向不一致，代表市場訊號混沌。建議維持現有倉位，不加碼也不急著減碼，等待兩套系統方向趨同後再決策。';
+    conclude.innerHTML = '<span style="color:#f0c040;font-weight:500;">模型偏多，儀表板中性</span>　量化模型看多但監控儀表板尚未確認，訊號強度不足。可小幅佈局但不宜重倉，等待儀表板評分突破 65 分後再積極加碼。';
+  } else if (modelBearDashNeutral) {
+    conclude.style.borderLeftColor = '#f0c040';
+    conclude.innerHTML = '<span style="color:#f0c040;font-weight:500;">模型偏空，儀表板中性</span>　量化模型趨向保守但監控儀表板尚在中性區間，建議維持標準倉位，密切觀察後續發展。';
   } else {
     conclude.style.borderLeftColor = '#6b8cba';
     conclude.innerHTML = '<span style="color:#6b8cba;font-weight:500;">訊號中性</span>　兩套系統目前均處於中性區間，無明確方向訊號，維持標準倉位觀望。';
