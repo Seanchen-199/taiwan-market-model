@@ -44,7 +44,10 @@ jobs:
 
       - name: API 診斷
         run: python diagnose_api.py
-
+        
+      - name: 測試 ADL 和景氣燈號
+        run: python test_adl.py
+        
       - name: 分年份收集資料
         run: |
           START=${{ steps.years.outputs.start }}
