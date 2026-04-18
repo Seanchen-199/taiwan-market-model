@@ -18,8 +18,6 @@ install('yfinance')
 install('requests')
 
 import requests
-import os
-os.makedirs('data', exist_ok=True)
 import yfinance as yf
 
 # ── 工具函式 ────────────────────────────────────────────────
@@ -137,6 +135,8 @@ def get_yahoo_data():
         '^SOX':      'sox',
         '^IXIC':     'nasdaq',
         '^TWII':     'twii',
+        'DX-Y.NYB':  'dxy',
+        '^TNX':      'us10y',
     }
     for sym, key in symbols.items():
         try:
@@ -178,6 +178,14 @@ def get_yahoo_data():
                 result['twii']        = round(price, 2)
                 result['twii_change'] = change_pct
                 print(f'   TWII: {price:,.2f}（{change_pct:+.2f}%）')
+            elif key == 'dxy':
+                result['dxy']        = round(price, 2)
+                result['dxy_change'] = change_pct
+                print(f'   DXY: {price:.2f}（{change_pct:+.2f}%）')
+            elif key == 'us10y':
+                result['us10y']        = round(price, 3)
+                result['us10y_change'] = change_pct
+                print(f'   US10Y: {price:.3f}%（{change_pct:+.2f}%）')
             elif key == 'etf_0050':
                 result['etf_0050_price']  = round(price, 2)
                 result['etf_0050_change'] = change_pct
@@ -283,7 +291,7 @@ def main():
     prev_total  = None
     prev_scores = None
     try:
-        with open('data/data.json', 'r', encoding='utf-8') as f:
+        with open('data.json', 'r', encoding='utf-8') as f:
             prev_data   = json.load(f)
             prev_total  = prev_data.get('total_score')
             prev_scores = prev_data.get('all_scores')
@@ -334,7 +342,7 @@ def main():
     output['all_scores'] = all_scores
 
     # 寫出 data.json
-    with open('data/data.json', 'w', encoding='utf-8') as f:
+    with open('data.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print()

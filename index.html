@@ -671,14 +671,14 @@ async function loadAutoData(){
     // Market chips on model page
     const mc=document.getElementById('market-chips');
     const mcItems=[
-      {label:'SOX 費半',val:d.sox?d.sox.toLocaleString():'--'},
-      {label:'加權指數',val:d.twii?d.twii.toLocaleString():'--'},
-      {label:'美元 DXY',val:'--'},
-      {label:'台幣匯率',val:d.usd_twd||'--'},
+      {label:'SOX 費半',val:d.sox?`${d.sox.toLocaleString()}（${(d.sox_change||0)>0?'+':''}${(d.sox_change||0).toFixed(2)}%）`:'--'},
+      {label:'加權指數',val:d.twii?`${d.twii.toLocaleString()}（${(d.twii_change||0)>0?'+':''}${(d.twii_change||0).toFixed(2)}%）`:'--'},
+      {label:'美元指數 DXY',val:d.dxy?`${d.dxy}（${(d.dxy_change||0)>0?'+':''}${(d.dxy_change||0).toFixed(2)}%）`:'--'},
+      {label:'美債10Y殖利率',val:d.us10y?`${d.us10y}%（${(d.us10y_change||0)>0?'+':''}${(d.us10y_change||0).toFixed(2)}%）`:'--'},
+      {label:'台幣匯率',val:d.usd_twd?`${d.usd_twd}（${d.twd_trend||'--'}）`:'--'},
       {label:'VIX',val:d.vix?`${d.vix}（${d.vix_status||''}）`:'--'},
       {label:'外資買賣超',val:d.foreign_net_buy!=null?`${(d.foreign_net_buy/100000).toFixed(1)}億`:'--'},
       {label:'外資期貨',val:d.futures_foreign_net!=null?`${d.futures_foreign_net.toLocaleString()}口`:'--'},
-      {label:'那斯達克',val:d.nasdaq?d.nasdaq.toLocaleString():'--'},
     ];
     mc.innerHTML=mcItems.map(it=>`
       <div class="chip">
