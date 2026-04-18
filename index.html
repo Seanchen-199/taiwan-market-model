@@ -236,6 +236,7 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
     <button class="nav-tab" onclick="switchPage('guide',this)">操作說明</button>
   </div>
   <div class="nav-right">
+    <div id="nav-signal-pill" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;"></div>
     <div class="live-badge">
       <div class="live-dot" id="live-dot"></div>
       <span id="live-time">--:--</span>
@@ -708,15 +709,32 @@ async function loadModelData(){
     const bt=d.backtest;
     const isBull=sig.signal===1;
 
-    document.getElementById('sig-label').textContent=sig.signal_label;
+    document.getElementById('sig-label').textContent = sig.signal_level || sig.signal_label;
     document.getElementById('sig-label').className='signal-num '+(isBull?'bull':'bear');
     document.getElementById('sig-date').textContent=
-      '預測週：' + sig.date + '　' + (sig.target_desc || '未來4週方向預測');
+      (sig.signal_emoji||'') + '  ' + (sig.signal_advice||'') + '　預測週：' + sig.date;
     document.getElementById('prob-bull-lbl').textContent=`多方 ${sig.bull_prob}%`;
     document.getElementById('prob-bear-lbl').textContent=`空方 ${sig.bear_prob}%`;
     document.getElementById('prob-bull-bar').style.width=sig.bull_prob+'%';
     document.getElementById('prob-bear-bar').style.width=sig.bear_prob+'%';
     document.getElementById('best-model-name').textContent = d.model_name;
+
+    // 導覽列訊號強度標籤
+    const pill = document.getElementById('nav-signal-pill');
+    if (pill) {
+      pill.style.display = '';
+      pill.textContent = (sig.signal_emoji||'') + ' ' + (sig.signal_level||sig.signal_label);
+      const levelColors = {
+        '強多': {bg:'rgba(0,229,160,0.15)',color:'#00e5a0'},
+        '弱多': {bg:'rgba(0,229,160,0.08)',color:'#00c880'},
+        '中性': {bg:'rgba(107,140,186,0.15)',color:'#6b8cba'},
+        '弱空': {bg:'rgba(255,77,106,0.08)',color:'#ff6b7a'},
+        '強空': {bg:'rgba(255,77,106,0.15)',color:'#ff4d6a'},
+      };
+      const lc = levelColors[sig.signal_level] || {bg:'rgba(107,140,186,0.15)',color:'#6b8cba'};
+      pill.style.background = lc.bg;
+      pill.style.color = lc.color;
+    }
     const freqLabel = d.freq === 'weekly' ? '週頻・目標：未來4週報酬' : '日頻・目標：未來5日報酬';
     document.getElementById('data-range-txt').textContent = freqLabel + '　' + d.data_range.start + ' ～ ' + d.data_range.end;
     document.getElementById('latest-date').textContent=sig.date;
