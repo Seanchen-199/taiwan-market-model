@@ -375,14 +375,15 @@ print(f"  多方機率：{bull_prob*100:.1f}%")
 print(f"  預測日期：{X.index[-1].date()}")
 
 # 滾動回測
-def rolling_backtest(X,y,price_series,window=504,step=21):
+def rolling_backtest(X,y,price_series,window=156,step=4):
+    """週頻滾動回測：window=156週(3年)，step=4週(1個月)"""
     returns=[]; dates=[]
     prices=price_series.reindex(X.index).ffill()
     for start in range(0,len(X)-window-step,step):
         end=start+window
         X_tr=X.iloc[start:end]; y_tr=y.iloc[start:end]
         X_fw=X.iloc[end:end+step]; p_fw=prices.iloc[end:end+step]
-        if len(X_tr)<120 or len(X_fw)==0 or y_tr.nunique()<2: continue
+        if len(X_tr)<52 or len(X_fw)==0 or y_tr.nunique()<2: continue
         m=GradientBoostingClassifier(n_estimators=100,max_depth=3,
                                       learning_rate=0.05,random_state=42,subsample=0.8)
         try:
@@ -407,12 +408,12 @@ def calc_metrics(returns):
     if len(returns)==0: return {}
     equity=(1+returns).cumprod()
     total_ret=equity.iloc[-1]-1
-    n_years=len(returns)/252
+    n_years=len(returns)/52   # 週頻用52
     cagr=(1+total_ret)**(1/max(n_years,0.1))-1
     peak=equity.cummax()
     max_dd=(equity-peak).div(peak).min()
-    ann_ret=returns.mean()*252
-    ann_std=returns.std()*np.sqrt(252)
+    ann_ret=returns.mean()*52  # 週頻年化
+    ann_std=returns.std()*np.sqrt(52)
     sharpe=ann_ret/ann_std if ann_std>0 else 0
     win_rate=(returns>0).sum()/max((returns!=0).sum(),1)
     return {'cagr':round(float(cagr*100),2),'max_dd':round(float(max_dd*100),2),
