@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026/04/18 09:34",
+  "updated_at": "2026/04/18 09:40",
   "model_name": "LogisticRegression",
   "freq": "weekly",
   "target": "未來4週報酬",
