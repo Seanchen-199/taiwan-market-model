@@ -710,13 +710,15 @@ async function loadModelData(){
 
     document.getElementById('sig-label').textContent=sig.signal_label;
     document.getElementById('sig-label').className='signal-num '+(isBull?'bull':'bear');
-    document.getElementById('sig-date').textContent='預測日期：'+sig.date;
+    document.getElementById('sig-date').textContent=
+      '預測週：' + sig.date + '　' + (sig.target_desc || '未來4週方向預測');
     document.getElementById('prob-bull-lbl').textContent=`多方 ${sig.bull_prob}%`;
     document.getElementById('prob-bear-lbl').textContent=`空方 ${sig.bear_prob}%`;
     document.getElementById('prob-bull-bar').style.width=sig.bull_prob+'%';
     document.getElementById('prob-bear-bar').style.width=sig.bear_prob+'%';
-    document.getElementById('best-model-name').textContent=d.model_name;
-    document.getElementById('data-range-txt').textContent=d.data_range.start+' ～ '+d.data_range.end;
+    document.getElementById('best-model-name').textContent = d.model_name;
+    const freqLabel = d.freq === 'weekly' ? '週頻・目標：未來4週報酬' : '日頻・目標：未來5日報酬';
+    document.getElementById('data-range-txt').textContent = freqLabel + '　' + d.data_range.start + ' ～ ' + d.data_range.end;
     document.getElementById('latest-date').textContent=sig.date;
 
     document.getElementById('m-cagr').textContent=bt.strategy.cagr+'%';
