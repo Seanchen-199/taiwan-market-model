@@ -1,0 +1,2 @@
+signal_date,recorded_at,model,bull_prob,signal_level,signal_label,advice,cagr,sharpe,max_dd,actual_4w_return,correct
+2026-04-12,2026/04/18 17:52,RandomForest,51.2,中性,多方,訊號不明確，維持標準倉位觀望,9.43,0.779,-20.16,,
