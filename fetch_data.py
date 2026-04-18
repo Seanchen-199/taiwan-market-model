@@ -291,7 +291,7 @@ def main():
     prev_total  = None
     prev_scores = None
     try:
-        with open('data.json', 'r', encoding='utf-8') as f:
+        with open('data/data.json', 'r', encoding='utf-8') as f:
             prev_data   = json.load(f)
             prev_total  = prev_data.get('total_score')
             prev_scores = prev_data.get('all_scores')
@@ -342,7 +342,8 @@ def main():
     output['all_scores'] = all_scores
 
     # 寫出 data.json
-    with open('data.json', 'w', encoding='utf-8') as f:
+    import os; os.makedirs('data', exist_ok=True)
+    with open('data/data.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print()
