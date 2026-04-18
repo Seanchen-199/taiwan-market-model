@@ -330,24 +330,35 @@ X_test,y_test=X.iloc[va_end:],y.iloc[va_end:]
 
 print(f"  樣本數：{len(X)}，訓練：{len(X_train)}，驗證：{len(X_val)}，測試：{len(X_test)}")
 
-tscv=TimeSeriesSplit(n_splits=5)
+# 修復 CV=NaN：使用 gap 避免資料洩漏
+def safe_cv_score(model, X, y, n_splits=5):
+    tscv = TimeSeriesSplit(n_splits=n_splits, gap=4)
+    scores = []
+    for tr_idx, val_idx in tscv.split(X):
+        X_tr, y_tr = X.iloc[tr_idx], y.iloc[tr_idx]
+        X_vl, y_vl = X.iloc[val_idx], y.iloc[val_idx]
+        if y_tr.nunique() < 2 or len(X_tr) < 52: continue
+        try:
+            m = model.__class__(**model.get_params())
+            m.fit(X_tr, y_tr)
+            scores.append(accuracy_score(y_vl, m.predict(X_vl)))
+        except: continue
+    return np.mean(scores) if scores else float('nan')
+
 models={
-    'LogisticRegression': LogisticRegression(C=0.1,max_iter=1000,random_state=42),
-    'RandomForest':       RandomForestClassifier(n_estimators=100,max_depth=5,random_state=42),
-    'GradientBoosting':   GradientBoostingClassifier(n_estimators=100,max_depth=3,
-                                                      learning_rate=0.05,random_state=42),
+    'LogisticRegression': LogisticRegression(C=0.05,max_iter=2000,random_state=42,class_weight='balanced'),
+    'RandomForest':       RandomForestClassifier(n_estimators=200,max_depth=5,min_samples_leaf=10,random_state=42),
+    'GradientBoosting':   GradientBoostingClassifier(n_estimators=200,max_depth=3,learning_rate=0.05,subsample=0.8,random_state=42),
 }
 results={}
 for name,model in models.items():
-    try:
-        cv=cross_val_score(model,X_train,y_train,cv=tscv,scoring='accuracy')
-        cv_mean=cv.mean()
-    except: cv_mean=0.5
+    cv_mean = safe_cv_score(model, X_train, y_train)
     model.fit(X_train,y_train)
     val_acc=accuracy_score(y_val,model.predict(X_val))
     test_acc=accuracy_score(y_test,model.predict(X_test))
     results[name]={'cv':cv_mean,'val':val_acc,'test':test_acc,'model':model}
-    print(f"  {name}: CV={cv_mean:.3f} Val={val_acc:.3f} Test={test_acc:.3f}")
+    cv_str = f"{cv_mean:.3f}" if not np.isnan(cv_mean) else "N/A"
+    print(f"  {name}: CV={cv_str} Val={val_acc:.3f} Test={test_acc:.3f}")
 
 best_name=max(results,key=lambda k:results[k]['val'])
 best_model=results[best_name]['model']
@@ -364,15 +375,47 @@ else:
 imp_df=pd.DataFrame({'feature':feature_cols,'importance':imp}).sort_values('importance',ascending=False)
 imp_df['is_core']=imp_df['feature'].apply(lambda f:any(c in f for c in CORE_FEATURES))
 
-# 預測當前
+# 預測當前 + 訊號強度五級
 latest_X=X.iloc[[-1]]
 pred=int(best_model.predict(latest_X)[0])
 proba=best_model.predict_proba(latest_X)[0]
 bull_prob=float(proba[list(best_model.classes_).index(1)]) if 1 in best_model.classes_ else 0.5
 
-print(f"\n  當前訊號：{'多方' if pred==1 else '空方'}")
-print(f"  多方機率：{bull_prob*100:.1f}%")
-print(f"  預測日期：{X.index[-1].date()}")
+def get_signal_level(bp):
+    if bp >= 0.75:   return '強多', '🟢🟢', '多方訊號強烈，可考慮積極加碼'
+    elif bp >= 0.60: return '弱多', '🟢',   '多方訊號，可小幅加碼或維持持倉'
+    elif bp >= 0.45: return '中性', '⚪',   '訊號不明確，維持標準倉位觀望'
+    elif bp >= 0.30: return '弱空', '🔴',   '空方訊號，可考慮小幅減碼'
+    else:            return '強空', '🔴🔴', '空方訊號強烈，建議大幅減碼或空手'
+
+signal_level, signal_emoji, signal_advice = get_signal_level(bull_prob)
+signal_date = str(X.index[-1].date())
+
+print(f"\n  當前訊號：{signal_emoji} {signal_level}（多方機率 {bull_prob*100:.1f}%）")
+print(f"  操作建議：{signal_advice}")
+print(f"  預測日期：{signal_date}")
+
+# 訊號記錄
+import csv as csv_mod
+log_path = 'data/signal_log.csv'
+log_exists = os.path.exists(log_path)
+existing_dates = set()
+if log_exists:
+    with open(log_path,'r',encoding='utf-8') as f:
+        for row in csv_mod.DictReader(f):
+            existing_dates.add(row.get('signal_date',''))
+if signal_date not in existing_dates:
+    with open(log_path,'a',newline='',encoding='utf-8') as f:
+        fields=['signal_date','recorded_at','model','bull_prob','signal_level',
+                'signal_label','advice','actual_4w_return','correct']
+        w=csv_mod.DictWriter(f,fieldnames=fields)
+        if not log_exists: w.writeheader()
+        w.writerow({'signal_date':signal_date,
+                    'recorded_at':datetime.datetime.now().strftime('%Y/%m/%d %H:%M'),
+                    'model':best_name,'bull_prob':round(bull_prob*100,1),
+                    'signal_level':signal_level,'signal_label':'多方' if pred==1 else '空方',
+                    'advice':signal_advice,'actual_4w_return':'','correct':''})
+    print(f"  ✅ 訊號已記錄至 {log_path}")
 
 # 滾動回測
 def rolling_backtest(X,y,price_series,window=156,step=4):
@@ -462,8 +505,10 @@ output=clean({
     'data_range':{'start':str(X.index[0].date()),'end':str(X.index[-1].date()),'days':len(X)},
     'split':{'train':len(X_train),'val':len(X_val),'test':len(X_test)},
     'current_signal':{'signal':pred,'signal_label':'多方' if pred==1 else '空方',
+                      'signal_level':signal_level,'signal_emoji':signal_emoji,
+                      'signal_advice':signal_advice,
                       'bull_prob':round(bull_prob*100,1),'bear_prob':round((1-bull_prob)*100,1),
-                      'date':str(X.index[-1].date()),
+                      'date':signal_date,
                       'target_desc':'未來4週（約20個交易日）方向預測'},
     'backtest':{'strategy':bt_m,'buyhold':bh_m},
     'factor_importance':top_factors,
@@ -477,4 +522,4 @@ with open('data/model_output.json','w',encoding='utf-8') as f:
     json.dump(output,f,ensure_ascii=False,indent=2)
 
 print(f"\n✅ model_output.json 已更新")
-print(f"   訊號：{'多方' if pred==1 else '空方'}（多方機率 {bull_prob*100:.1f}%）")
+print(f"   訊號：{signal_emoji} {signal_level}（多方機率 {bull_prob*100:.1f}%）")
