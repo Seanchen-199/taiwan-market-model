@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026/05/04 09:32",
-  "updated_ts": 1777887142,
+  "updated_at": "2026/05/04 12:23",
+  "updated_ts": 1777897424,
   "source": {
     "yahoo": "Yahoo Finance (yfinance)",
     "twse": "台灣證交所",
@@ -13,7 +13,7 @@
   "usd_twd": 31.604,
   "twd_trend": "貶值",
   "score_usd_twd": 6.0,
-  "vix": 17.46,
+  "vix": 17.96,
   "vix_status": "平穩",
   "score_vix": 7,
   "sox": 10595.34,
@@ -23,8 +23,8 @@
   "nasdaq_change": 0.89,
   "twii": 40705.14,
   "twii_change": 4.57,
-  "dxy": 98.25,
-  "dxy_change": 0.04,
+  "dxy": 98.37,
+  "dxy_change": 0.16,
   "us10y": 4.378,
   "us10y_change": -0.27,
   "date_institutional": "2026/05/04",
