@@ -1,15 +1,15 @@
 {
-  "updated_at": "2026/05/02 20:04",
+  "updated_at": "2026/05/09 20:10",
   "model_name": "RandomForest",
   "freq": "weekly",
   "target": "未來4週報酬",
   "data_range": {
     "start": "2004-08-01",
-    "end": "2026-04-26",
-    "days": 1021
+    "end": "2026-05-03",
+    "days": 1022
   },
   "split": {
-    "train": 612,
+    "train": 613,
     "val": 204,
     "test": 205
   },
@@ -19,9 +19,9 @@
     "signal_level": "中性",
     "signal_emoji": "⚪",
     "signal_advice": "訊號不明確，維持標準倉位觀望",
-    "bull_prob": 48.1,
-    "bear_prob": 51.9,
-    "date": "2026-04-26",
+    "bull_prob": 48.8,
+    "bear_prob": 51.2,
+    "date": "2026-05-03",
     "target_desc": "未來4週（約20個交易日）方向預測"
   },
   "backtest": {
@@ -45,123 +45,123 @@
   "factor_importance": [
     {
       "name": "top10_net",
-      "importance": 0.19992,
+      "importance": 0.19696,
       "is_core": true,
-      "pct": 20.0
+      "pct": 19.7
     },
     {
       "name": "US10Y_ret1_lag4",
-      "importance": 0.04095,
+      "importance": 0.04062,
       "is_core": true,
       "pct": 4.1
     },
     {
       "name": "W_MACD_hist_lag4",
-      "importance": 0.03783,
+      "importance": 0.03689,
       "is_core": false,
-      "pct": 3.8
-    },
-    {
-      "name": "SOX_ret1",
-      "importance": 0.03513,
-      "is_core": true,
-      "pct": 3.5
-    },
-    {
-      "name": "W_MACD_hist",
-      "importance": 0.03349,
-      "is_core": false,
-      "pct": 3.3
+      "pct": 3.7
     },
     {
       "name": "W_RSI14",
-      "importance": 0.03275,
+      "importance": 0.03544,
+      "is_core": false,
+      "pct": 3.5
+    },
+    {
+      "name": "SOX_ret1",
+      "importance": 0.03357,
+      "is_core": true,
+      "pct": 3.4
+    },
+    {
+      "name": "W_MACD_hist",
+      "importance": 0.03346,
       "is_core": false,
       "pct": 3.3
     },
     {
-      "name": "US10Y_ret4",
-      "importance": 0.02986,
-      "is_core": true,
-      "pct": 3.0
-    },
-    {
-      "name": "W_MA5",
-      "importance": 0.02821,
-      "is_core": false,
-      "pct": 2.8
-    },
-    {
-      "name": "USDTWD_ret1_lag1",
-      "importance": 0.02791,
-      "is_core": true,
-      "pct": 2.8
-    },
-    {
       "name": "W_RSI14_lag4",
-      "importance": 0.02758,
+      "importance": 0.02836,
       "is_core": false,
+      "pct": 2.8
+    },
+    {
+      "name": "US10Y_ret4",
+      "importance": 0.02825,
+      "is_core": true,
       "pct": 2.8
     },
     {
       "name": "USDTWD_ret1_lag2",
-      "importance": 0.02705,
+      "importance": 0.02809,
+      "is_core": true,
+      "pct": 2.8
+    },
+    {
+      "name": "USDTWD_ret1_lag1",
+      "importance": 0.02724,
       "is_core": true,
       "pct": 2.7
     },
     {
+      "name": "W_MA5",
+      "importance": 0.02629,
+      "is_core": false,
+      "pct": 2.6
+    },
+    {
       "name": "DXY_ret1_lag1",
-      "importance": 0.0251,
+      "importance": 0.02517,
       "is_core": true,
       "pct": 2.5
     },
     {
       "name": "US10Y_ret1",
-      "importance": 0.02507,
+      "importance": 0.02484,
       "is_core": true,
       "pct": 2.5
     },
     {
-      "name": "US10Y_ret1_lag1",
-      "importance": 0.0244,
+      "name": "USDTWD_ret1",
+      "importance": 0.02353,
       "is_core": true,
       "pct": 2.4
     },
     {
-      "name": "DXY_ret4",
-      "importance": 0.0223,
+      "name": "US10Y_ret1_lag1",
+      "importance": 0.023,
       "is_core": true,
-      "pct": 2.2
-    },
-    {
-      "name": "USDTWD_ret1",
-      "importance": 0.02154,
-      "is_core": true,
-      "pct": 2.2
+      "pct": 2.3
     },
     {
       "name": "USDTWD_ret4",
-      "importance": 0.0213,
+      "importance": 0.02198,
+      "is_core": true,
+      "pct": 2.2
+    },
+    {
+      "name": "US10Y_ret1_lag2",
+      "importance": 0.02195,
+      "is_core": true,
+      "pct": 2.2
+    },
+    {
+      "name": "DXY_ret4",
+      "importance": 0.0217,
+      "is_core": true,
+      "pct": 2.2
+    },
+    {
+      "name": "TWII_ret4",
+      "importance": 0.02081,
       "is_core": true,
       "pct": 2.1
     },
     {
       "name": "invest_net_bil_ret1_lag4",
-      "importance": 0.02033,
+      "importance": 0.01957,
       "is_core": true,
       "pct": 2.0
-    },
-    {
-      "name": "US10Y_ret1_lag2",
-      "importance": 0.01998,
-      "is_core": true,
-      "pct": 2.0
-    },
-    {
-      "name": "DXY_ret1_lag2",
-      "importance": 0.01878,
-      "is_core": true,
-      "pct": 1.9
     }
   ],
   "equity_curve": [
@@ -1420,22 +1420,22 @@
     {
       "name": "LogisticRegression",
       "cv_acc": 51.0,
-      "val_acc": 53.9,
-      "test_acc": 59.5,
+      "val_acc": 52.9,
+      "test_acc": 60.0,
       "is_best": false
     },
     {
       "name": "RandomForest",
-      "cv_acc": 43.6,
-      "val_acc": 56.4,
-      "test_acc": 53.2,
+      "cv_acc": 45.3,
+      "val_acc": 54.4,
+      "test_acc": 56.1,
       "is_best": true
     },
     {
       "name": "GradientBoosting",
-      "cv_acc": 47.8,
-      "val_acc": 47.1,
-      "test_acc": 38.5,
+      "cv_acc": 45.1,
+      "val_acc": 53.4,
+      "test_acc": 37.6,
       "is_best": false
     }
   ],
