@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026/05/18 11:15",
-  "updated_ts": 1779102914,
+  "updated_at": "2026/05/18 11:30",
+  "updated_ts": 1779103852,
   "source": {
     "yahoo": "Yahoo Finance (yfinance)",
     "twse": "台灣證交所",
@@ -10,10 +10,10 @@
   "etf_0050_change": -0.52,
   "etf_006208_price": 219.4,
   "etf_006208_change": -0.45,
-  "usd_twd": 31.608,
+  "usd_twd": 31.605,
   "twd_trend": "貶值",
   "score_usd_twd": 6.0,
-  "vix": 19.16,
+  "vix": 19.23,
   "vix_status": "平穩",
   "score_vix": 7,
   "sox": 11588.46,
