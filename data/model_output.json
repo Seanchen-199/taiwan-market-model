@@ -1,15 +1,15 @@
 {
-  "updated_at": "2026/11/14 21:56",
+  "updated_at": "2026/11/21 22:44",
   "model_name": "RandomForest",
   "freq": "weekly",
   "target": "未來4週報酬",
   "data_range": {
     "start": "2004-08-01",
-    "end": "2026-11-08",
-    "days": 1049
+    "end": "2026-11-15",
+    "days": 1050
   },
   "split": {
-    "train": 629,
+    "train": 630,
     "val": 210,
     "test": 210
   },
@@ -19,19 +19,19 @@
     "signal_level": "中性",
     "signal_emoji": "⚪",
     "signal_advice": "訊號不明確，維持標準倉位觀望",
-    "bull_prob": 50.7,
-    "bear_prob": 49.3,
-    "date": "2026-11-08",
+    "bull_prob": 51.2,
+    "bear_prob": 48.8,
+    "date": "2026-11-15",
     "target_desc": "未來4週（約20個交易日）方向預測"
   },
   "backtest": {
     "strategy": {
-      "cagr": 10.94,
+      "cagr": 11.04,
       "max_dd": -21.26,
-      "sharpe": 0.849,
-      "win_rate": 58.52,
-      "total_ret": 280.36,
-      "n_trades": 393
+      "sharpe": 0.856,
+      "win_rate": 58.63,
+      "total_ret": 284.59,
+      "n_trades": 394
     },
     "buyhold": {
       "cagr": 6.97,
@@ -45,121 +45,121 @@
   "factor_importance": [
     {
       "name": "top10_net",
-      "importance": 0.20229,
+      "importance": 0.20614,
       "is_core": true,
-      "pct": 20.2
-    },
-    {
-      "name": "W_MACD_hist_lag4",
-      "importance": 0.03959,
-      "is_core": false,
-      "pct": 4.0
+      "pct": 20.6
     },
     {
       "name": "US10Y_ret1_lag4",
-      "importance": 0.03892,
+      "importance": 0.03939,
       "is_core": true,
       "pct": 3.9
     },
     {
+      "name": "W_MACD_hist_lag4",
+      "importance": 0.03712,
+      "is_core": false,
+      "pct": 3.7
+    },
+    {
       "name": "SOX_ret1",
-      "importance": 0.03197,
+      "importance": 0.03453,
       "is_core": true,
-      "pct": 3.2
-    },
-    {
-      "name": "USDTWD_ret1_lag1",
-      "importance": 0.03111,
-      "is_core": true,
-      "pct": 3.1
-    },
-    {
-      "name": "USDTWD_ret1_lag2",
-      "importance": 0.03078,
-      "is_core": true,
-      "pct": 3.1
+      "pct": 3.5
     },
     {
       "name": "W_MACD_hist",
-      "importance": 0.03029,
+      "importance": 0.03364,
+      "is_core": false,
+      "pct": 3.4
+    },
+    {
+      "name": "USDTWD_ret1_lag1",
+      "importance": 0.0305,
+      "is_core": true,
+      "pct": 3.0
+    },
+    {
+      "name": "W_RSI14_lag4",
+      "importance": 0.03028,
       "is_core": false,
       "pct": 3.0
     },
     {
       "name": "US10Y_ret4",
-      "importance": 0.02921,
+      "importance": 0.02863,
       "is_core": true,
       "pct": 2.9
-    },
-    {
-      "name": "W_RSI14_lag4",
-      "importance": 0.02853,
-      "is_core": false,
-      "pct": 2.9
-    },
-    {
-      "name": "W_RSI14",
-      "importance": 0.02743,
-      "is_core": false,
-      "pct": 2.7
     },
     {
       "name": "US10Y_ret1_lag1",
-      "importance": 0.02728,
+      "importance": 0.02763,
+      "is_core": true,
+      "pct": 2.8
+    },
+    {
+      "name": "W_RSI14",
+      "importance": 0.02761,
+      "is_core": false,
+      "pct": 2.8
+    },
+    {
+      "name": "W_MA5",
+      "importance": 0.02707,
+      "is_core": false,
+      "pct": 2.7
+    },
+    {
+      "name": "USDTWD_ret1_lag2",
+      "importance": 0.02681,
       "is_core": true,
       "pct": 2.7
     },
     {
-      "name": "USDTWD_ret4",
-      "importance": 0.02631,
-      "is_core": true,
-      "pct": 2.6
-    },
-    {
       "name": "US10Y_ret1",
-      "importance": 0.02598,
+      "importance": 0.02569,
       "is_core": true,
       "pct": 2.6
     },
     {
-      "name": "W_MA5",
-      "importance": 0.02572,
-      "is_core": false,
-      "pct": 2.6
+      "name": "USDTWD_ret4",
+      "importance": 0.02489,
+      "is_core": true,
+      "pct": 2.5
     },
     {
       "name": "DXY_ret1_lag1",
-      "importance": 0.02446,
+      "importance": 0.02363,
       "is_core": true,
       "pct": 2.4
     },
     {
-      "name": "SOX_ret4",
-      "importance": 0.02177,
-      "is_core": true,
-      "pct": 2.2
-    },
-    {
       "name": "DXY_ret1_lag2",
-      "importance": 0.02064,
+      "importance": 0.02266,
       "is_core": true,
-      "pct": 2.1
+      "pct": 2.3
     },
     {
-      "name": "USDTWD_ret1",
-      "importance": 0.01974,
+      "name": "SOX_ret4",
+      "importance": 0.02047,
       "is_core": true,
       "pct": 2.0
     },
     {
       "name": "DXY_ret4",
-      "importance": 0.01881,
+      "importance": 0.02013,
+      "is_core": true,
+      "pct": 2.0
+    },
+    {
+      "name": "USDTWD_ret1",
+      "importance": 0.01886,
       "is_core": true,
       "pct": 1.9
     },
     {
       "name": "W_MACD",
-      "importance": 0.01822,
+      "importance": 0.01779,
       "is_core": false,
       "pct": 1.8
     }
@@ -167,1275 +167,1275 @@
   "equity_curve": [
     {
       "date": "2020-06-14",
-      "strategy": 1.7246,
+      "strategy": 1.8008,
       "buyhold": 0.9989
     },
     {
       "date": "2020-06-28",
-      "strategy": 1.7734,
+      "strategy": 1.8518,
       "buyhold": 1.0118
     },
     {
       "date": "2020-07-05",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.0405
     },
     {
       "date": "2020-07-12",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.0641
     },
     {
       "date": "2020-07-26",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.0861
     },
     {
       "date": "2020-08-02",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1446
     },
     {
       "date": "2020-08-09",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.154
     },
     {
       "date": "2020-08-23",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1352
     },
     {
       "date": "2020-08-30",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1429
     },
     {
       "date": "2020-09-06",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1324
     },
     {
       "date": "2020-09-20",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1549
     },
     {
       "date": "2020-09-27",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1039
     },
     {
       "date": "2020-10-04",
-      "strategy": 1.8137,
+      "strategy": 1.8939,
       "buyhold": 1.1297
     },
     {
       "date": "2020-10-18",
-      "strategy": 1.8283,
+      "strategy": 1.9092,
       "buyhold": 1.1196
     },
     {
       "date": "2020-10-25",
-      "strategy": 1.8283,
+      "strategy": 1.9092,
       "buyhold": 1.1286
     },
     {
       "date": "2020-11-01",
-      "strategy": 1.894,
+      "strategy": 1.9777,
       "buyhold": 1.0956
     },
     {
       "date": "2020-11-15",
-      "strategy": 1.9763,
+      "strategy": 2.0637,
       "buyhold": 1.1218
     },
     {
       "date": "2020-11-22",
-      "strategy": 1.9876,
+      "strategy": 2.0755,
       "buyhold": 1.1706
     },
     {
       "date": "2020-11-29",
-      "strategy": 1.9876,
+      "strategy": 2.0755,
       "buyhold": 1.1773
     },
     {
       "date": "2020-12-13",
-      "strategy": 1.9784,
+      "strategy": 2.0659,
       "buyhold": 1.1918
     },
     {
       "date": "2020-12-20",
-      "strategy": 1.991,
+      "strategy": 2.079,
       "buyhold": 1.1863
     },
     {
       "date": "2020-12-27",
-      "strategy": 2.0353,
+      "strategy": 2.1253,
       "buyhold": 1.1938
     },
     {
       "date": "2021-01-10",
-      "strategy": 2.0353,
+      "strategy": 2.1253,
       "buyhold": 1.2881
     },
     {
       "date": "2021-01-17",
-      "strategy": 2.1253,
+      "strategy": 2.2193,
       "buyhold": 1.3205
     },
     {
       "date": "2021-01-24",
-      "strategy": 1.9823,
+      "strategy": 2.0699,
       "buyhold": 1.3789
     },
     {
       "date": "2021-02-07",
-      "strategy": 1.9823,
+      "strategy": 2.0699,
       "buyhold": 1.4498
     },
     {
       "date": "2021-02-14",
-      "strategy": 2.0418,
+      "strategy": 2.1321,
       "buyhold": 1.4498
     },
     {
       "date": "2021-02-21",
-      "strategy": 1.9617,
+      "strategy": 2.0484,
       "buyhold": 1.4934
     },
     {
       "date": "2021-03-07",
-      "strategy": 2.0107,
+      "strategy": 2.0996,
       "buyhold": 1.4772
     },
     {
       "date": "2021-03-14",
-      "strategy": 1.9743,
+      "strategy": 2.0616,
       "buyhold": 1.5141
     },
     {
       "date": "2021-03-21",
-      "strategy": 1.9973,
+      "strategy": 2.0857,
       "buyhold": 1.4867
     },
     {
       "date": "2021-04-04",
-      "strategy": 2.0297,
+      "strategy": 2.1195,
       "buyhold": 1.5022
     },
     {
       "date": "2021-04-11",
-      "strategy": 2.0488,
+      "strategy": 2.1394,
       "buyhold": 1.5265
     },
     {
       "date": "2021-04-18",
-      "strategy": 2.0474,
+      "strategy": 2.1379,
       "buyhold": 1.5409
     },
     {
       "date": "2021-05-02",
-      "strategy": 2.0474,
+      "strategy": 2.1379,
       "buyhold": 1.557
     },
     {
       "date": "2021-05-09",
-      "strategy": 1.8939,
+      "strategy": 1.9776,
       "buyhold": 1.5437
     },
     {
       "date": "2021-05-16",
-      "strategy": 1.8939,
+      "strategy": 1.9776,
       "buyhold": 1.428
     },
     {
       "date": "2021-05-30",
-      "strategy": 1.9099,
+      "strategy": 1.9944,
       "buyhold": 1.4652
     },
     {
       "date": "2021-06-06",
-      "strategy": 1.926,
+      "strategy": 2.0111,
       "buyhold": 1.4776
     },
     {
       "date": "2021-06-13",
-      "strategy": 1.9246,
+      "strategy": 2.0097,
       "buyhold": 1.49
     },
     {
       "date": "2021-06-27",
-      "strategy": 1.9435,
+      "strategy": 2.0295,
       "buyhold": 1.4787
     },
     {
       "date": "2021-07-04",
-      "strategy": 1.9358,
+      "strategy": 2.0214,
       "buyhold": 1.4932
     },
     {
       "date": "2021-07-11",
-      "strategy": 1.966,
+      "strategy": 2.053,
       "buyhold": 1.4873
     },
     {
       "date": "2021-07-25",
-      "strategy": 1.9432,
+      "strategy": 2.0291,
       "buyhold": 1.4671
     },
     {
       "date": "2021-08-01",
-      "strategy": 1.9432,
+      "strategy": 2.0291,
       "buyhold": 1.4501
     },
     {
       "date": "2021-08-08",
-      "strategy": 1.8991,
+      "strategy": 1.9831,
       "buyhold": 1.4794
     },
     {
       "date": "2021-08-22",
-      "strategy": 2.0066,
+      "strategy": 2.0953,
       "buyhold": 1.4259
     },
     {
       "date": "2021-08-29",
-      "strategy": 2.061,
+      "strategy": 2.1522,
       "buyhold": 1.5066
     },
     {
       "date": "2021-09-05",
-      "strategy": 2.0618,
+      "strategy": 2.1529,
       "buyhold": 1.5475
     },
     {
       "date": "2021-09-19",
-      "strategy": 2.0618,
+      "strategy": 2.1529,
       "buyhold": 1.5317
     },
     {
       "date": "2021-09-26",
-      "strategy": 1.9776,
+      "strategy": 2.065,
       "buyhold": 1.5225
     },
     {
       "date": "2021-10-03",
-      "strategy": 1.9813,
+      "strategy": 2.0689,
       "buyhold": 1.4603
     },
     {
       "date": "2021-10-17",
-      "strategy": 1.9849,
+      "strategy": 2.0727,
       "buyhold": 1.4826
     },
     {
       "date": "2021-10-24",
-      "strategy": 1.9747,
+      "strategy": 2.0621,
       "buyhold": 1.4853
     },
     {
       "date": "2021-10-31",
-      "strategy": 1.9747,
+      "strategy": 2.0621,
       "buyhold": 1.4777
     },
     {
       "date": "2021-11-14",
-      "strategy": 2.0186,
+      "strategy": 2.1078,
       "buyhold": 1.4948
     },
     {
       "date": "2021-11-21",
-      "strategy": 1.9528,
+      "strategy": 2.0392,
       "buyhold": 1.528
     },
     {
       "date": "2021-11-28",
-      "strategy": 2.0037,
+      "strategy": 2.0923,
       "buyhold": 1.4783
     },
     {
       "date": "2021-12-12",
-      "strategy": 2.003,
+      "strategy": 2.0916,
       "buyhold": 1.4803
     },
     {
       "date": "2021-12-19",
-      "strategy": 2.0193,
+      "strategy": 2.1085,
       "buyhold": 1.4798
     },
     {
       "date": "2021-12-26",
-      "strategy": 2.0538,
+      "strategy": 2.1447,
       "buyhold": 1.4918
     },
     {
       "date": "2022-01-09",
-      "strategy": 2.1057,
+      "strategy": 2.1988,
       "buyhold": 1.5031
     },
     {
       "date": "2022-01-16",
-      "strategy": 2.0423,
+      "strategy": 2.1326,
       "buyhold": 1.541
     },
     {
       "date": "2022-01-23",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.4947
     },
     {
       "date": "2022-02-06",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.4947
     },
     {
       "date": "2022-02-13",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.5306
     },
     {
       "date": "2022-02-20",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.5216
     },
     {
       "date": "2022-03-06",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.5211
     },
     {
       "date": "2022-03-13",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.4766
     },
     {
       "date": "2022-03-20",
-      "strategy": 2.0266,
+      "strategy": 2.1162,
       "buyhold": 1.4952
     },
     {
       "date": "2022-04-03",
-      "strategy": 1.9911,
+      "strategy": 2.0791,
       "buyhold": 1.4817
     },
     {
       "date": "2022-04-10",
-      "strategy": 1.957,
+      "strategy": 2.0436,
       "buyhold": 1.4557
     },
     {
       "date": "2022-04-17",
-      "strategy": 1.9474,
+      "strategy": 2.0335,
       "buyhold": 1.4309
     },
     {
       "date": "2022-05-01",
-      "strategy": 1.9157,
+      "strategy": 2.0004,
       "buyhold": 1.3999
     },
     {
       "date": "2022-05-08",
-      "strategy": 1.8506,
+      "strategy": 1.9324,
       "buyhold": 1.377
     },
     {
       "date": "2022-05-15",
-      "strategy": 1.8854,
+      "strategy": 1.9688,
       "buyhold": 1.3303
     },
     {
       "date": "2022-05-29",
-      "strategy": 1.92,
+      "strategy": 2.0048,
       "buyhold": 1.3394
     },
     {
       "date": "2022-06-05",
-      "strategy": 1.9094,
+      "strategy": 1.9939,
       "buyhold": 1.3639
     },
     {
       "date": "2022-06-12",
-      "strategy": 1.8155,
+      "strategy": 1.8958,
       "buyhold": 1.3564
     },
     {
       "date": "2022-06-26",
-      "strategy": 1.7141,
+      "strategy": 1.7899,
       "buyhold": 1.3261
     },
     {
       "date": "2022-07-03",
-      "strategy": 1.7402,
+      "strategy": 1.8172,
       "buyhold": 1.2521
     },
     {
       "date": "2022-07-10",
-      "strategy": 1.7748,
+      "strategy": 1.8533,
       "buyhold": 1.2711
     },
     {
       "date": "2022-07-24",
-      "strategy": 1.7931,
+      "strategy": 1.8723,
       "buyhold": 1.3058
     },
     {
       "date": "2022-07-31",
-      "strategy": 1.8194,
+      "strategy": 1.8999,
       "buyhold": 1.3192
     },
     {
       "date": "2022-08-07",
-      "strategy": 1.8392,
+      "strategy": 1.9205,
       "buyhold": 1.3386
     },
     {
       "date": "2022-08-21",
-      "strategy": 1.8097,
+      "strategy": 1.8897,
       "buyhold": 1.3469
     },
     {
       "date": "2022-08-28",
-      "strategy": 1.7234,
+      "strategy": 1.7996,
       "buyhold": 1.3253
     },
     {
       "date": "2022-09-04",
-      "strategy": 1.7234,
+      "strategy": 1.7996,
       "buyhold": 1.2621
     },
     {
       "date": "2022-09-18",
-      "strategy": 1.7234,
+      "strategy": 1.7996,
       "buyhold": 1.2571
     },
     {
       "date": "2022-09-25",
-      "strategy": 1.7234,
+      "strategy": 1.7996,
       "buyhold": 1.2253
     },
     {
       "date": "2022-10-02",
-      "strategy": 1.7234,
+      "strategy": 1.7996,
       "buyhold": 1.1555
     },
     {
       "date": "2022-10-16",
-      "strategy": 1.6735,
+      "strategy": 1.7475,
       "buyhold": 1.1081
     },
     {
       "date": "2022-10-23",
-      "strategy": 1.6735,
+      "strategy": 1.7475,
       "buyhold": 1.076
     },
     {
       "date": "2022-10-30",
-      "strategy": 1.6735,
+      "strategy": 1.7475,
       "buyhold": 1.0635
     },
     {
       "date": "2022-11-13",
-      "strategy": 1.7541,
+      "strategy": 1.8317,
       "buyhold": 1.1727
     },
     {
       "date": "2022-11-20",
-      "strategy": 1.7541,
+      "strategy": 1.8317,
       "buyhold": 1.2292
     },
     {
       "date": "2022-11-27",
-      "strategy": 1.7632,
+      "strategy": 1.8411,
       "buyhold": 1.2556
     },
     {
       "date": "2022-12-11",
-      "strategy": 1.7325,
+      "strategy": 1.8091,
       "buyhold": 1.231
     },
     {
       "date": "2022-12-18",
-      "strategy": 1.6972,
+      "strategy": 1.7723,
       "buyhold": 1.2095
     },
     {
       "date": "2022-12-25",
-      "strategy": 1.6972,
+      "strategy": 1.7723,
       "buyhold": 1.1849
     },
     {
       "date": "2023-01-08",
-      "strategy": 1.7792,
+      "strategy": 1.8579,
       "buyhold": 1.2021
     },
     {
       "date": "2023-01-15",
-      "strategy": 1.7929,
+      "strategy": 1.8721,
       "buyhold": 1.2602
     },
     {
       "date": "2023-01-22",
-      "strategy": 1.7929,
+      "strategy": 1.8721,
       "buyhold": 1.2699
     },
     {
       "date": "2023-02-05",
-      "strategy": 1.7929,
+      "strategy": 1.8721,
       "buyhold": 1.3303
     },
     {
       "date": "2023-02-12",
-      "strategy": 1.7595,
+      "strategy": 1.8373,
       "buyhold": 1.3303
     },
     {
       "date": "2023-02-19",
-      "strategy": 1.7603,
+      "strategy": 1.8381,
       "buyhold": 1.3056
     },
     {
       "date": "2023-03-05",
-      "strategy": 1.7448,
+      "strategy": 1.8219,
       "buyhold": 1.3117
     },
     {
       "date": "2023-03-12",
-      "strategy": 1.7544,
+      "strategy": 1.8319,
       "buyhold": 1.3001
     },
     {
       "date": "2023-03-19",
-      "strategy": 1.7544,
+      "strategy": 1.8319,
       "buyhold": 1.3073
     },
     {
       "date": "2023-04-02",
-      "strategy": 1.7457,
+      "strategy": 1.8229,
       "buyhold": 1.3008
     },
     {
       "date": "2023-04-09",
-      "strategy": 1.7407,
+      "strategy": 1.8176,
       "buyhold": 1.2944
     },
     {
       "date": "2023-04-16",
-      "strategy": 1.7111,
+      "strategy": 1.7867,
       "buyhold": 1.2907
     },
     {
       "date": "2023-04-30",
-      "strategy": 1.7169,
+      "strategy": 1.7928,
       "buyhold": 1.2776
     },
     {
       "date": "2023-05-07",
-      "strategy": 1.7082,
+      "strategy": 1.7837,
       "buyhold": 1.282
     },
     {
       "date": "2023-05-14",
-      "strategy": 1.7854,
+      "strategy": 1.8644,
       "buyhold": 1.2754
     },
     {
       "date": "2023-05-28",
-      "strategy": 1.7968,
+      "strategy": 1.8762,
       "buyhold": 1.3114
     },
     {
       "date": "2023-06-04",
-      "strategy": 1.8116,
+      "strategy": 1.8917,
       "buyhold": 1.3197
     },
     {
       "date": "2023-06-11",
-      "strategy": 1.8648,
+      "strategy": 1.9473,
       "buyhold": 1.3306
     },
     {
       "date": "2023-06-25",
-      "strategy": 1.8441,
+      "strategy": 1.9256,
       "buyhold": 1.3205
     },
     {
       "date": "2023-07-02",
-      "strategy": 1.8241,
+      "strategy": 1.9047,
       "buyhold": 1.3058
     },
     {
       "date": "2023-07-09",
-      "strategy": 1.8891,
+      "strategy": 1.9726,
       "buyhold": 1.2917
     },
     {
       "date": "2023-07-23",
-      "strategy": 1.9232,
+      "strategy": 2.0083,
       "buyhold": 1.2605
     },
     {
       "date": "2023-07-30",
-      "strategy": 1.8898,
+      "strategy": 1.9734,
       "buyhold": 1.2833
     },
     {
       "date": "2023-08-06",
-      "strategy": 1.8757,
+      "strategy": 1.9587,
       "buyhold": 1.261
     },
     {
       "date": "2023-08-20",
-      "strategy": 1.8863,
+      "strategy": 1.9697,
       "buyhold": 1.2365
     },
     {
       "date": "2023-08-27",
-      "strategy": 1.9068,
+      "strategy": 1.9911,
       "buyhold": 1.2435
     },
     {
       "date": "2023-09-03",
-      "strategy": 1.8825,
+      "strategy": 1.9658,
       "buyhold": 1.257
     },
     {
       "date": "2023-09-17",
-      "strategy": 1.8825,
+      "strategy": 1.9658,
       "buyhold": 1.2878
     },
     {
       "date": "2023-09-24",
-      "strategy": 1.8825,
+      "strategy": 1.9658,
       "buyhold": 1.2403
     },
     {
       "date": "2023-10-01",
-      "strategy": 1.9048,
+      "strategy": 1.989,
       "buyhold": 1.2403
     },
     {
       "date": "2023-10-15",
-      "strategy": 1.8815,
+      "strategy": 1.9647,
       "buyhold": 1.2688
     },
     {
       "date": "2023-10-22",
-      "strategy": 1.835,
+      "strategy": 1.9162,
       "buyhold": 1.2533
     },
     {
       "date": "2023-10-29",
-      "strategy": 1.8823,
+      "strategy": 1.9655,
       "buyhold": 1.2223
     },
     {
       "date": "2023-11-12",
-      "strategy": 1.9454,
+      "strategy": 2.0314,
       "buyhold": 1.235
     },
     {
       "date": "2023-11-19",
-      "strategy": 1.9454,
+      "strategy": 2.0314,
       "buyhold": 1.2764
     },
     {
       "date": "2023-11-26",
-      "strategy": 1.9454,
+      "strategy": 2.0314,
       "buyhold": 1.2783
     },
     {
       "date": "2023-12-10",
-      "strategy": 1.9454,
+      "strategy": 2.0314,
       "buyhold": 1.2711
     },
     {
       "date": "2023-12-17",
-      "strategy": 1.9345,
+      "strategy": 2.02,
       "buyhold": 1.2968
     },
     {
       "date": "2023-12-24",
-      "strategy": 1.9709,
+      "strategy": 2.058,
       "buyhold": 1.2895
     },
     {
       "date": "2024-01-07",
-      "strategy": 1.9783,
+      "strategy": 2.0658,
       "buyhold": 1.2581
     },
     {
       "date": "2024-01-14",
-      "strategy": 1.9783,
+      "strategy": 2.0658,
       "buyhold": 1.2628
     },
     {
       "date": "2024-01-21",
-      "strategy": 2.0193,
+      "strategy": 2.1085,
       "buyhold": 1.2947
     },
     {
       "date": "2024-02-04",
-      "strategy": 2.0193,
+      "strategy": 2.1085,
       "buyhold": 1.2895
     },
     {
       "date": "2024-02-11",
-      "strategy": 2.0987,
+      "strategy": 2.1915,
       "buyhold": 1.2976
     },
     {
       "date": "2024-02-18",
-      "strategy": 2.0987,
+      "strategy": 2.1915,
       "buyhold": 1.3487
     },
     {
       "date": "2024-03-03",
-      "strategy": 2.2699,
+      "strategy": 2.3703,
       "buyhold": 1.3397
     },
     {
       "date": "2024-03-10",
-      "strategy": 2.2486,
+      "strategy": 2.348,
       "buyhold": 1.449
     },
     {
       "date": "2024-03-17",
-      "strategy": 2.3103,
+      "strategy": 2.4125,
       "buyhold": 1.4354
     },
     {
       "date": "2024-03-31",
-      "strategy": 2.3213,
+      "strategy": 2.424,
       "buyhold": 1.4409
     },
     {
       "date": "2024-04-07",
-      "strategy": 2.3733,
+      "strategy": 2.4782,
       "buyhold": 1.4478
     },
     {
       "date": "2024-04-14",
-      "strategy": 2.2093,
+      "strategy": 2.307,
       "buyhold": 1.4802
     },
     {
       "date": "2024-04-28",
-      "strategy": 2.2228,
+      "strategy": 2.3211,
       "buyhold": 1.5302
     },
     {
       "date": "2024-05-05",
-      "strategy": 2.2893,
+      "strategy": 2.3906,
       "buyhold": 1.5395
     },
     {
       "date": "2024-05-12",
-      "strategy": 2.2893,
+      "strategy": 2.3906,
       "buyhold": 1.5856
     },
     {
       "date": "2024-05-26",
-      "strategy": 2.2276,
+      "strategy": 2.3261,
       "buyhold": 1.6174
     },
     {
       "date": "2024-06-02",
-      "strategy": 2.3195,
+      "strategy": 2.4221,
       "buyhold": 1.5738
     },
     {
       "date": "2024-06-09",
-      "strategy": 2.4155,
+      "strategy": 2.5223,
       "buyhold": 1.6387
     },
     {
       "date": "2024-06-23",
-      "strategy": 2.3879,
+      "strategy": 2.4935,
       "buyhold": 1.717
     },
     {
       "date": "2024-06-30",
-      "strategy": 2.4565,
+      "strategy": 2.5651,
       "buyhold": 1.6974
     },
     {
       "date": "2024-07-07",
-      "strategy": 2.5147,
+      "strategy": 2.6259,
       "buyhold": 1.7462
     },
     {
       "date": "2024-07-21",
-      "strategy": 2.4169,
+      "strategy": 2.5237,
       "buyhold": 1.6648
     },
     {
       "date": "2024-07-28",
-      "strategy": 2.3588,
+      "strategy": 2.4631,
       "buyhold": 1.6
     },
     {
       "date": "2024-08-04",
-      "strategy": 2.3743,
+      "strategy": 2.4793,
       "buyhold": 1.5616
     },
     {
       "date": "2024-08-18",
-      "strategy": 2.3426,
+      "strategy": 2.4462,
       "buyhold": 1.6286
     },
     {
       "date": "2024-08-25",
-      "strategy": 2.3478,
+      "strategy": 2.4516,
       "buyhold": 1.6068
     },
     {
       "date": "2024-09-01",
-      "strategy": 2.2623,
+      "strategy": 2.3624,
       "buyhold": 1.6104
     },
     {
       "date": "2024-09-15",
-      "strategy": 2.3137,
+      "strategy": 2.416,
       "buyhold": 1.644
     },
     {
       "date": "2024-09-22",
-      "strategy": 2.3955,
+      "strategy": 2.5014,
       "buyhold": 1.6814
     },
     {
       "date": "2024-09-29",
-      "strategy": 2.3283,
+      "strategy": 2.4312,
       "buyhold": 1.7408
     },
     {
       "date": "2024-10-13",
-      "strategy": 2.4004,
+      "strategy": 2.5065,
       "buyhold": 1.8219
     },
     {
       "date": "2024-10-20",
-      "strategy": 2.3798,
+      "strategy": 2.485,
       "buyhold": 1.8783
     },
     {
       "date": "2024-10-27",
-      "strategy": 2.3083,
+      "strategy": 2.4104,
       "buyhold": 1.8622
     },
     {
       "date": "2024-11-10",
-      "strategy": 2.3083,
+      "strategy": 2.4104,
       "buyhold": 1.9452
     },
     {
       "date": "2024-11-17",
-      "strategy": 2.3083,
+      "strategy": 2.4104,
       "buyhold": 1.8802
     },
     {
       "date": "2024-11-24",
-      "strategy": 2.3083,
+      "strategy": 2.4104,
       "buyhold": 1.8871
     },
     {
       "date": "2024-12-08",
-      "strategy": 2.3083,
+      "strategy": 2.4104,
       "buyhold": 1.9727
     },
     {
       "date": "2024-12-15",
-      "strategy": 2.2764,
+      "strategy": 2.377,
       "buyhold": 1.9682
     },
     {
       "date": "2024-12-22",
-      "strategy": 2.3508,
+      "strategy": 2.377,
       "buyhold": 1.941
     },
     {
       "date": "2025-01-05",
-      "strategy": 2.3868,
+      "strategy": 2.4134,
       "buyhold": 1.9127
     },
     {
       "date": "2025-01-12",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.942
     },
     {
       "date": "2025-01-19",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.9421
     },
     {
       "date": "2025-02-02",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.9421
     },
     {
       "date": "2025-02-09",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.9156
     },
     {
       "date": "2025-02-16",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.8717
     },
     {
       "date": "2025-03-02",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.8201
     },
     {
       "date": "2025-03-09",
-      "strategy": 2.387,
+      "strategy": 2.4136,
       "buyhold": 1.762
     },
     {
       "date": "2025-03-16",
-      "strategy": 2.4194,
+      "strategy": 2.4463,
       "buyhold": 1.7067
     },
     {
       "date": "2025-03-30",
-      "strategy": 2.3762,
+      "strategy": 2.4026,
       "buyhold": 1.6717
     },
     {
       "date": "2025-04-06",
-      "strategy": 2.2216,
+      "strategy": 2.2463,
       "buyhold": 1.6418
     },
     {
       "date": "2025-04-13",
-      "strategy": 2.1723,
+      "strategy": 2.1965,
       "buyhold": 1.535
     },
     {
       "date": "2025-04-27",
-      "strategy": 2.2739,
+      "strategy": 2.2992,
       "buyhold": 1.5813
     },
     {
       "date": "2025-05-04",
-      "strategy": 2.2903,
+      "strategy": 2.3158,
       "buyhold": 1.6552
     },
     {
       "date": "2025-05-11",
-      "strategy": 2.2903,
+      "strategy": 2.3158,
       "buyhold": 1.6672
     },
     {
       "date": "2025-05-25",
-      "strategy": 2.2763,
+      "strategy": 2.3017,
       "buyhold": 1.6476
     },
     {
       "date": "2025-06-01",
-      "strategy": 2.3042,
+      "strategy": 2.3299,
       "buyhold": 1.6376
     },
     {
       "date": "2025-06-08",
-      "strategy": 2.389,
+      "strategy": 2.4157,
       "buyhold": 1.6576
     },
     {
       "date": "2025-06-22",
-      "strategy": 2.453,
+      "strategy": 2.4804,
       "buyhold": 1.6529
     },
     {
       "date": "2025-06-29",
-      "strategy": 2.482,
+      "strategy": 2.5097,
       "buyhold": 1.6972
     },
     {
       "date": "2025-07-06",
-      "strategy": 2.482,
+      "strategy": 2.5097,
       "buyhold": 1.7173
     },
     {
       "date": "2025-07-20",
-      "strategy": 2.482,
+      "strategy": 2.5097,
       "buyhold": 1.7806
     },
     {
       "date": "2025-07-27",
-      "strategy": 2.482,
+      "strategy": 2.5097,
       "buyhold": 1.774
     },
     {
       "date": "2025-08-03",
-      "strategy": 2.482,
+      "strategy": 2.5097,
       "buyhold": 1.7809
     },
     {
       "date": "2025-08-17",
-      "strategy": 2.4166,
+      "strategy": 2.4435,
       "buyhold": 1.8047
     },
     {
       "date": "2025-08-24",
-      "strategy": 2.4516,
+      "strategy": 2.479,
       "buyhold": 1.7572
     },
     {
       "date": "2025-08-31",
-      "strategy": 2.468,
+      "strategy": 2.4955,
       "buyhold": 1.7826
     },
     {
       "date": "2025-09-14",
-      "strategy": 2.5121,
+      "strategy": 2.54,
       "buyhold": 1.8889
     },
     {
       "date": "2025-09-21",
-      "strategy": 2.5231,
+      "strategy": 2.5512,
       "buyhold": 1.9226
     },
     {
       "date": "2025-09-28",
-      "strategy": 2.6465,
+      "strategy": 2.676,
       "buyhold": 1.9311
     },
     {
       "date": "2025-10-12",
-      "strategy": 2.6465,
+      "strategy": 2.676,
       "buyhold": 1.9809
     },
     {
       "date": "2025-10-19",
-      "strategy": 2.6593,
+      "strategy": 2.6889,
       "buyhold": 1.9954
     },
     {
       "date": "2025-10-26",
-      "strategy": 2.7616,
+      "strategy": 2.7924,
       "buyhold": 2.005
     },
     {
       "date": "2025-11-09",
-      "strategy": 2.7616,
+      "strategy": 2.7924,
       "buyhold": 1.9369
     },
     {
       "date": "2025-11-16",
-      "strategy": 2.7616,
+      "strategy": 2.7924,
       "buyhold": 1.9106
     },
     {
       "date": "2025-11-23",
-      "strategy": 2.7616,
+      "strategy": 2.7924,
       "buyhold": 1.8533
     },
     {
       "date": "2025-12-07",
-      "strategy": 2.7924,
+      "strategy": 2.8236,
       "buyhold": 1.8652
     },
     {
       "date": "2025-12-14",
-      "strategy": 2.7506,
+      "strategy": 2.7813,
       "buyhold": 1.886
     },
     {
       "date": "2025-12-21",
-      "strategy": 2.8343,
+      "strategy": 2.8658,
       "buyhold": 1.8577
     },
     {
       "date": "2026-01-04",
-      "strategy": 2.957,
+      "strategy": 2.99,
       "buyhold": 1.9313
     },
     {
       "date": "2026-01-11",
-      "strategy": 2.957,
+      "strategy": 2.99,
       "buyhold": 2.015
     },
     {
       "date": "2026-01-18",
-      "strategy": 3.0092,
+      "strategy": 3.0427,
       "buyhold": 2.077
     },
     {
       "date": "2026-02-01",
-      "strategy": 2.9802,
+      "strategy": 3.0134,
       "buyhold": 2.087
     },
     {
       "date": "2026-02-08",
-      "strategy": 3.1998,
+      "strategy": 3.2355,
       "buyhold": 2.0669
     },
     {
       "date": "2026-02-15",
-      "strategy": 3.1998,
+      "strategy": 3.2355,
       "buyhold": 2.2193
     },
     {
       "date": "2026-03-01",
-      "strategy": 3.1998,
+      "strategy": 3.2355,
       "buyhold": 2.3328
     },
     {
       "date": "2026-03-08",
-      "strategy": 3.1998,
+      "strategy": 3.2355,
       "buyhold": 2.2092
     },
     {
       "date": "2026-03-15",
-      "strategy": 3.1998,
+      "strategy": 3.2355,
       "buyhold": 2.1833
     },
     {
       "date": "2026-03-29",
-      "strategy": 3.155,
+      "strategy": 3.1902,
       "buyhold": 2.1575
     },
     {
       "date": "2026-04-05",
-      "strategy": 3.4452,
+      "strategy": 3.4835,
       "buyhold": 2.1273
     },
     {
       "date": "2026-04-12",
-      "strategy": 3.4452,
+      "strategy": 3.4835,
       "buyhold": 2.3229
     },
     {
       "date": "2026-04-26",
-      "strategy": 3.4662,
+      "strategy": 3.5048,
       "buyhold": 2.483
     },
     {
       "date": "2026-05-03",
-      "strategy": 3.4662,
+      "strategy": 3.5048,
       "buyhold": 2.4981
     },
     {
       "date": "2026-05-10",
-      "strategy": 3.4662,
+      "strategy": 3.5048,
       "buyhold": 2.6776
     },
     {
       "date": "2026-05-24",
-      "strategy": 3.7548,
+      "strategy": 3.7966,
       "buyhold": 2.7309
     },
     {
       "date": "2026-05-31",
-      "strategy": 3.7102,
+      "strategy": 3.7516,
       "buyhold": 2.9582
     },
     {
       "date": "2026-06-07",
-      "strategy": 3.6319,
+      "strategy": 3.6723,
       "buyhold": 2.9232
     },
     {
       "date": "2026-06-21",
-      "strategy": 3.4897,
+      "strategy": 3.5286,
       "buyhold": 3.0766
     },
     {
       "date": "2026-06-28",
-      "strategy": 3.6674,
+      "strategy": 3.7083,
       "buyhold": 2.9561
     },
     {
       "date": "2026-07-05",
-      "strategy": 3.5811,
+      "strategy": 3.621,
       "buyhold": 3.1067
     },
     {
       "date": "2026-07-19",
-      "strategy": 3.5811,
+      "strategy": 3.621,
       "buyhold": 2.923
     },
     {
       "date": "2026-07-26",
-      "strategy": 3.5811,
+      "strategy": 3.621,
       "buyhold": 2.9863
     },
     {
       "date": "2026-08-02",
-      "strategy": 3.5811,
+      "strategy": 3.621,
       "buyhold": 3.02
     },
     {
       "date": "2026-08-16",
-      "strategy": 3.5222,
+      "strategy": 3.5614,
       "buyhold": 3.1243
     },
     {
       "date": "2026-08-23",
-      "strategy": 3.5996,
+      "strategy": 3.6397,
       "buyhold": 3.0729
     },
     {
       "date": "2026-08-30",
-      "strategy": 3.6316,
+      "strategy": 3.672,
       "buyhold": 3.1404
     },
     {
       "date": "2026-09-13",
-      "strategy": 3.7041,
+      "strategy": 3.7453,
       "buyhold": 3.1346
     },
     {
       "date": "2026-09-20",
-      "strategy": 3.7901,
+      "strategy": 3.8323,
       "buyhold": 3.1972
     },
     {
       "date": "2026-09-27",
-      "strategy": 3.8036,
+      "strategy": 3.8459,
       "buyhold": 3.2714
     },
     {
       "date": "2026-10-11",
-      "strategy": 3.8036,
+      "strategy": 3.8459,
       "buyhold": 3.3337
     },
     {
       "date": "2026-10-18",
-      "strategy": 3.8036,
+      "strategy": 3.8459,
       "buyhold": 3.1612
     },
     {
       "date": "2026-10-25",
-      "strategy": 3.8036,
+      "strategy": 3.8459,
       "buyhold": 3.1003
     }
   ],
   "model_comparison": [
     {
       "name": "LogisticRegression",
-      "cv_acc": 50.5,
-      "val_acc": 53.3,
-      "test_acc": 64.3,
+      "cv_acc": 50.2,
+      "val_acc": 54.8,
+      "test_acc": 63.8,
       "is_best": false
     },
     {
       "name": "RandomForest",
-      "cv_acc": 47.8,
-      "val_acc": 57.6,
-      "test_acc": 45.7,
+      "cv_acc": 48.6,
+      "val_acc": 56.2,
+      "test_acc": 44.3,
       "is_best": true
     },
     {
       "name": "GradientBoosting",
-      "cv_acc": 52.9,
-      "val_acc": 51.9,
-      "test_acc": 35.2,
+      "cv_acc": 53.6,
+      "val_acc": 45.2,
+      "test_acc": 36.2,
       "is_best": false
     }
   ],
